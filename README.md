@@ -1,2 +1,2 @@
 # FlightGearBuilder
-An "elegant" script to donwload and build OpenSceneGraph, PLIB, SimgGear and FlightGear.,
+An “elegant” script to download and build OpenSceneGraph, PLIB, SimgGear and FlightGear.
