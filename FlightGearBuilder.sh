@@ -187,4 +187,5 @@ fi
 echo "#====== If everything went well then you can run FlightGear"
 echo "#====== by running the command fgfs or fgfs --launcher."
 echo ""
-echo "#====== 
+echo "#====== Feel free to ask for help and contribute to this script at"
+echo "#====== https://github.com/Megaf/FlightGearBuilder "
