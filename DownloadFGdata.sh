@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# FlightGearBuilder.sh v0.2
-# DownloadFGdata.sh v0.1
+# DownloadFGdata.sh v0.2
 
 ### AUTHOR
 # This software was created by Megaf - https://github.com/Megaf
