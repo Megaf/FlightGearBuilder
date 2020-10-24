@@ -119,9 +119,11 @@ fi
 echo "#====== Checking if FlightGear data was already downloaded."
 if [ -d "$installdir/data" ]; then
 echo "#======  FlightGear Data found, updating the repo if neded."
-cd $installdir/data && git pull &
+cd $installdir/data && git pull
 else
 echo "#====== FlightGear Data not found, downloading now."
+echo "#====== FlightGear Data will be downloaded in background while FlightGear Builder"
+echo "#====== compiles the other components."
 git clone --depth=1 git://git.code.sf.net/p/flightgear/fgdata $installdir/data &
 fi
 
