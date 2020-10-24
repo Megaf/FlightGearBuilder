@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# FlightGearBuilder.sh v0.1
+# FlightGearBuilder.sh v0.2
 
 ### AUTHOR
 # This software was created by Megaf - https://github.com/Megaf
@@ -48,7 +48,7 @@
 #
 # After that, everything will be compiled from scratch according to
 # the flags and variables set bellow.
-#
+
 
 # Uses ccache (https://ccache.dev/) if it's available, to speed rebuilds
 export PATH="/usr/lib/ccache:${PATH}"
@@ -66,6 +66,18 @@ mkdir -p $buildir/OSG $buildir/PLIB $buildir/SimGear $buildir/FlightGear
 # Variables defining which branches will be used for each repository.
 fgbranch="next" # Branches for FlightHear and SimGear
 osgbranch="fgfs-342-1" # Branch for OpenSceneGraph
+
+### INTRODUCTION PART
+clear
+echo "#====== Welcome to FlightGearBuilder!"
+echo "#====== This script will download OpenSceneGraph, PLIB, SimGear and FLightGear."
+echo ""
+echo "#====== If you want to download fgdata too press ctrl + c and rerun this script"
+echo "#====== with the flag --get-fgdata. You can run the script DownloadFGdata.sh at any time to download fgdata on its own."
+echo ""
+# Waits for the user to press a key to continue.
+echo "#====== Press any key to continue."
+read -rsn1
 
 ### CHECKS AND GIT CLONE
 # We will perform a series of checks to see if the repos were cloned
@@ -114,17 +126,20 @@ git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/flightgear $
 fi
 
 # Checking FlightGear Data.
-# FlightGear Data clone will be running in background while the script
-# is doing everything else.
 echo "#====== Checking if FlightGear data was already downloaded."
 if [ -d "$installdir/data" ]; then
 echo "#======  FlightGear Data found, updating the repo if neded."
 cd $installdir/data && git pull
-else
-echo "#====== FlightGear Data not found, downloading now."
+fi
+
+# If the user uses the flag --get-fgdata then the script will download fgdata.
+# FlightGear Data clone will be running in background while the script
+# is doing everything else.
+if [ $*="--get-fgdata" ]; then
+echo "#====== Downloading FGFATA."
 echo "#====== FlightGear Data will be downloaded in background while FlightGear Builder"
 echo "#====== compiles the other components."
-git clone --depth=1 git://git.code.sf.net/p/flightgear/fgdata $installdir/data &
+git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/fgdata $installdir/data &
 fi
 
 # Now the script will run cmake and make and make install
