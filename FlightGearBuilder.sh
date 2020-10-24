@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# FlightGearBuilder.sh v0.2
+# FlightGearBuilder.sh v0.2.1
 
 ### AUTHOR
 # This software was created by Megaf - https://github.com/Megaf
@@ -176,8 +176,6 @@ echo "#====== you have all dependencies required."
 # Creating directory
 echo "#====== Creating directory $HOME/.local/bin."
 mkdir -p $HOME/.local/bin
-echo "#====== Adding $HOME/.local/bin to your PATH."
-echo "PATH='$PATH':$HOME/.local/bin" >> $HOME/.bashrc
 
 echo "#====== Creating fgfs runner script."
 # Creates ~/.local/bin/fgfs
@@ -201,6 +199,12 @@ else
 echo "#====== Something went wrong when creating fgfs runner."
 fi
 
+echo "#====== Adding $HOME/.local/bin to your PATH."
+echo "PATH='$PATH':$HOME/.local/bin" >> $HOME/.bashrc
+# Renunning .bashrc to update PATH
+source $HOME/.bashrc
+echo "#====== Done. ~/.local/bin was added to your PATH and now you run the command fgfs."
+echo ""
 echo "#====== If everything went well then you can run FlightGear"
 echo "#====== by running the command fgfs or fgfs --launcher."
 echo ""
