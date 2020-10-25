@@ -78,6 +78,7 @@ echo ""
 # Waits for the user to press a key to continue.
 echo "#====== Press any key to continue."
 read -rsn1
+clear
 
 ### CHECKS AND GIT CLONE
 # We will perform a series of checks to see if the repos were cloned
@@ -96,6 +97,7 @@ git clone --depth=1 -b $osgbranch https://github.com/zakalawe/osg/ $tempdir/OSG
 fi
 
 # Checking PLIB
+echo ""
 echo "#====== Checking if PLIB was already downloaded."
 if [ -d "$tempdir/PLIB" ]; then
 echo "#======  PLIB found, updating the repo if neded."
@@ -106,6 +108,7 @@ git clone --depth=1 https://git.code.sf.net/p/libplib/code $tempdir/PLIB
 fi
 
 # Checking SimGear
+echo ""
 echo "#====== Checking if SimGear was already downloaded."
 if [ -d "$tempdir/SimGear" ]; then
 echo "#======  SimGear found, updating the repo if neded."
@@ -116,6 +119,7 @@ git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/simgear $tem
 fi
 
 # Checking FlightGear
+echo ""
 echo "#====== Checking if FlightGear was already downloaded."
 if [ -d "$tempdir/FlightGear" ]; then
 echo "#======  FlightGear found, updating the repo if neded."
@@ -126,6 +130,7 @@ git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/flightgear $
 fi
 
 # Checking FlightGear Data.
+echo ""
 echo "#====== Checking if FlightGear data was already downloaded."
 if [ -d "$installdir/data" ]; then
 echo "#======  FlightGear Data found, updating the repo if neded."
@@ -144,24 +149,28 @@ fi
 
 # Now the script will run cmake and make and make install
 # for each component.
+echo ""
 echo "#====== Compiling OpenSceneGraph."
 cd $buildir/OSG && cmake $tempdir/OSG -DBUILD_OSG_APPLICATIONS=OFF -DBUILD_OSG_DEPRECATED_SERIALIZERS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_C_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $(nproc) && echo "#====== Installing OpenSceneGraph." && make install && rm -rf $buildir/OSG
 echo "#====== If something went wrong when compiling OpenSceneGraph then make sure"
 echo "#====== you have all dependencies required."
 
+echo ""
 echo "#====== Compiling PLIB."
 cd $buildir/PLIB && cmake $tempdir/PLIB -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_C_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $(nproc) && echo "#====== Installing PLIB." && make install&& rm -rf $buildir/PLIB
 echo "#====== If something went wrong when compiling PLIB then make sure"
 echo "#====== you have all dependencies required."
 
+echo ""
 echo "#====== Compiling SimGear."
 cd $buildir/SimGear && cmake $tempdir/SimGear -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_C_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $(nproc) && echo "#====== Installing SimGear." && make install&& rm -rf $buildir/SimGear
 echo "#====== If something went wrong when compiling SimGear then make sure"
 echo "#====== you have all dependencies required."
 
+echo ""
 echo "#====== Compiling FlightGear."
 cd $buildir/FlightGear && cmake $tempdir/FlightGear -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_C_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $(nproc) && echo "#====== Installing FlightGear." && make install && rm -rf $buildir/FlightGear
@@ -174,9 +183,11 @@ echo "#====== you have all dependencies required."
 # The directory ~/.local.bin will be created and added to your PATH.
 
 # Creating directory
+echo ""
 echo "#====== Creating directory $HOME/.local/bin."
 mkdir -p $HOME/.local/bin
 
+echo ""
 echo "#====== Creating fgfs runner script."
 # Creates ~/.local/bin/fgfs
 cat << EOF > $HOME/.local/bin/fgfs
@@ -194,15 +205,22 @@ chmod +x $HOME/.local/bin/fgfs
 
 # Checking if the file was created.
 if [ -e $HOME/.local/bin/fgfs ]; then
+echo ""
 echo "#====== fgfs runner created."
 else
+echo ""
 echo "#====== Something went wrong when creating fgfs runner."
 fi
 
+echo ""
 echo "#====== Adding $HOME/.local/bin to your PATH."
 echo "PATH='$PATH':$HOME/.local/bin" >> $HOME/.bashrc
 # Renunning .bashrc to update PATH
 source $HOME/.bashrc
+echo ""
+echo ""
+echo ""
+echo ""
 echo "#====== Done. ~/.local/bin was added to your PATH and now you run the command fgfs."
 echo ""
 echo "#====== If everything went well then you can run FlightGear"
@@ -210,3 +228,4 @@ echo "#====== by running the command fgfs or fgfs --launcher."
 echo ""
 echo "#====== Feel free to ask for help and contribute to this script at"
 echo "#====== https://github.com/Megaf/FlightGearBuilder "
+echo ""
