@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 # FlightGearBuilder.sh v0.2.1
 
 ### AUTHOR
@@ -60,6 +62,10 @@ tempdir="/tmp/FlightGear_Sources"
 # Temporary directory where cmake will run from.
 buildir="/dev/shm/FlightGear_Compiler_Output"
 
+# Compiler flags
+cflags="-m64 -march=native -mavx -mtune=native -O3 -pipe -mfpmath=both -flto"
+buildtype="Release"
+
 # Creating directories where cmake will run from.
 mkdir -p $buildir/OSG $buildir/PLIB $buildir/SimGear $buildir/FlightGear
 
@@ -85,7 +91,11 @@ clear
 # already or not, if they were not cloned yet, then git clone will run,
 # Otherwise, the script will try to update, git pull, the repos.
 
+echo ""
+echo "#====== Downloading Source Codes and Building Started."
+
 # Checking OpenSceneGraph
+echo ""
 echo "#====== Checking if OpenSceneGraph was already downloaded."
 if [ -d "$tempdir/OSG" ]; then
 echo "#======  OpenSceneGraph found, updating the repo if neded."
@@ -151,28 +161,28 @@ fi
 # for each component.
 echo ""
 echo "#====== Compiling OpenSceneGraph."
-cd $buildir/OSG && cmake $tempdir/OSG -DBUILD_OSG_APPLICATIONS=OFF -DBUILD_OSG_DEPRECATED_SERIALIZERS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_C_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/OSG && cmake $tempdir/OSG -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=legacy -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $(nproc) && echo "#====== Installing OpenSceneGraph." && make install && rm -rf $buildir/OSG
 echo "#====== If something went wrong when compiling OpenSceneGraph then make sure"
 echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling PLIB."
-cd $buildir/PLIB && cmake $tempdir/PLIB -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_C_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/PLIB && cmake $tempdir/PLIB -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=legacy -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $(nproc) && echo "#====== Installing PLIB." && make install&& rm -rf $buildir/PLIB
 echo "#====== If something went wrong when compiling PLIB then make sure"
 echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling SimGear."
-cd $buildir/SimGear && cmake $tempdir/SimGear -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_C_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/SimGear && cmake $tempdir/SimGear -DCMAKE_BUILD_TYPE="$buildtype" -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $(nproc) && echo "#====== Installing SimGear." && make install&& rm -rf $buildir/SimGear
 echo "#====== If something went wrong when compiling SimGear then make sure"
 echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling FlightGear."
-cd $buildir/FlightGear && cmake $tempdir/FlightGear -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_C_FLAGS_RELEASE="-m64 -march=x86-64 -mavx -mtune=generic -O2 -pipe" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/FlightGear && cmake $tempdir/FlightGear -DCMAKE_BUILD_TYPE="$buildtype" -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $(nproc) && echo "#====== Installing FlightGear." && make install && rm -rf $buildir/FlightGear
 echo "#====== If something went wrong when compiling FlightGear then make sure"
 echo "#====== you have all dependencies required."
@@ -211,6 +221,12 @@ else
 echo ""
 echo "#====== Something went wrong when creating fgfs runner."
 fi
+
+# TODO
+# Make script detect if the line was already added to bashrc or not
+
+# TODO
+# Maybe we should add fgfs to /usr/local/bin instead?
 
 echo ""
 echo "#====== Adding $HOME/.local/bin to your PATH."
