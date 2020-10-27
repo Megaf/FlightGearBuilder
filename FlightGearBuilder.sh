@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -x
+# Uncomment to enable "debugging" of the script
+# set -x
 
 # FlightGearBuilder.sh v0.2.1
 
