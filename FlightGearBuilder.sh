@@ -162,14 +162,14 @@ fi
 # for each component.
 echo ""
 echo "#====== Compiling OpenSceneGraph."
-cd $buildir/OSG && cmake $tempdir/OSG -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=legacy -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/OSG && cmake $tempdir/OSG -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $(nproc) && echo "#====== Installing OpenSceneGraph." && make install && rm -rf $buildir/OSG
 echo "#====== If something went wrong when compiling OpenSceneGraph then make sure"
 echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling PLIB."
-cd $buildir/PLIB && cmake $tempdir/PLIB -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=legacy -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/PLIB && cmake $tempdir/PLIB -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $(nproc) && echo "#====== Installing PLIB." && make install&& rm -rf $buildir/PLIB
 echo "#====== If something went wrong when compiling PLIB then make sure"
 echo "#====== you have all dependencies required."
