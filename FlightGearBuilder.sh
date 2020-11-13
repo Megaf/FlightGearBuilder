@@ -155,7 +155,7 @@ echo ""
 echo "#====== Checking if FlightGear data was already downloaded."
 if [ -d "$installdir/data" ]; then
 echo "#======  FlightGear Data found, updating the repo if neded."
-#cd $installdir/data && git pull
+cd $installdir/data && git pull
 fi
 
 # If the user uses the flag --get-fgdata then the script will download fgdata.
@@ -165,7 +165,7 @@ if [ $*="--get-fgdata" ]; then
 echo "#====== Downloading FGFATA."
 echo "#====== FlightGear Data will be downloaded in background while FlightGear Builder"
 echo "#====== compiles the other components."
-#git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/fgdata $installdir/data &
+git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/fgdata $installdir/data &
 fi
 
 # Now the script will run cmake and make and make install
