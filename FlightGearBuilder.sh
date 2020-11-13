@@ -3,7 +3,14 @@
 # Uncomment to enable "debugging" of the script
 # set -x
 
-# FlightGearBuilder.sh v0.2.1
+# FlightGearBuilder.sh
+builderversion="v0.3"
+
+# CHANGELOG
+# v0.3
+# No longer creates launcher at .local/bin and no longer changes PATH.
+# Moved some OSD git URL to variable.
+# Moved nproc to variable.
 
 ### AUTHOR
 # This software was created by Megaf - https://github.com/Megaf
@@ -64,7 +71,7 @@ tempdir="/tmp/FlightGear_Sources"
 buildir="/dev/shm/FlightGear_Compiler_Output"
 
 # Compiler flags
-cflags="-m64 -march=native -mavx -mtune=native -O3 -pipe -mfpmath=both -flto"
+cflags="-m64 -march=native -mavx -mtune=core2 -O2 -pipe -mfpmath=both -flto -fomit-frame-pointer"
 buildtype="Release"
 
 # Creating directories where cmake will run from.
@@ -73,10 +80,13 @@ mkdir -p $buildir/OSG $buildir/PLIB $buildir/SimGear $buildir/FlightGear
 # Variables defining which branches will be used for each repository.
 fgbranch="next" # Branches for FlightHear and SimGear
 osgbranch="fgfs-342-1" # Branch for OpenSceneGraph
+osgurl="https://github.com/zakalawe/osg/" # OSG Git repo to use
+ncores="$(nproc)" # Sets the number of compiler tasks according to numer of logical cpus
+
 
 ### INTRODUCTION PART
 clear
-echo "#====== Welcome to FlightGearBuilder!"
+echo "#====== Welcome to FlightGearBuilder $builderversion !"
 echo "#====== This script will download OpenSceneGraph, PLIB, SimGear and FLightGear."
 echo ""
 echo "#====== If you want to download fgdata too press ctrl + c and rerun this script"
@@ -104,7 +114,7 @@ cd $tempdir/OSG && git pull
 else
 echo "#====== OpenSceneGraph not found, downloading now."
 #git clone --depth=1 -b $osgbranch https://github.com/openscenegraph/OpenSceneGraph/ $tempdir/OSG
-git clone --depth=1 -b $osgbranch https://github.com/zakalawe/osg/ $tempdir/OSG
+git clone --depth=1 -b $osgbranch $osgurl $tempdir/OSG
 fi
 
 # Checking PLIB
@@ -163,45 +173,35 @@ fi
 echo ""
 echo "#====== Compiling OpenSceneGraph."
 cd $buildir/OSG && cmake $tempdir/OSG -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
-make -j $(nproc) && echo "#====== Installing OpenSceneGraph." && make install && rm -rf $buildir/OSG
+make -j $ncores && echo "#====== Installing OpenSceneGraph." && make install && rm -rf $buildir/OSG
 echo "#====== If something went wrong when compiling OpenSceneGraph then make sure"
 echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling PLIB."
 cd $buildir/PLIB && cmake $tempdir/PLIB -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
-make -j $(nproc) && echo "#====== Installing PLIB." && make install&& rm -rf $buildir/PLIB
+make -j $ncores && echo "#====== Installing PLIB." && make install&& rm -rf $buildir/PLIB
 echo "#====== If something went wrong when compiling PLIB then make sure"
 echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling SimGear."
 cd $buildir/SimGear && cmake $tempdir/SimGear -DCMAKE_BUILD_TYPE="$buildtype" -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
-make -j $(nproc) && echo "#====== Installing SimGear." && make install&& rm -rf $buildir/SimGear
+make -j $ncores && echo "#====== Installing SimGear." && make install&& rm -rf $buildir/SimGear
 echo "#====== If something went wrong when compiling SimGear then make sure"
 echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling FlightGear."
 cd $buildir/FlightGear && cmake $tempdir/FlightGear -DCMAKE_BUILD_TYPE="$buildtype" -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
-make -j $(nproc) && echo "#====== Installing FlightGear." && make install && rm -rf $buildir/FlightGear
+make -j $ncores && echo "#====== Installing FlightGear." && make install && rm -rf $buildir/FlightGear
 echo "#====== If something went wrong when compiling FlightGear then make sure"
 echo "#====== you have all dependencies required."
 
-# This portion of the script will generate a script to launch flightgear
-# by using the standard fgfs command and it's sintaxe.
-#
-# The directory ~/.local.bin will be created and added to your PATH.
-
-# Creating directory
-echo ""
-echo "#====== Creating directory $HOME/.local/bin."
-mkdir -p $HOME/.local/bin
-
 echo ""
 echo "#====== Creating fgfs runner script."
-# Creates ~/.local/bin/fgfs
-cat << EOF > $HOME/.local/bin/fgfs
+# Creates $installdir/flightgear
+cat << EOF > $installdir/flightgear
 #!/bin/bash
 export LD_LIBRARY_PATH=$installdir/lib:$installdir/lib64:$PATH
 export FG HOME=$installdir/FG_HOME
@@ -210,12 +210,12 @@ cd $installdir/bin
 EOF
 
 # Adds the launcher line to that script.
-echo './fgfs $*' >> $HOME/.local/bin/fgfs
+echo './fgfs $*' >> $installdir/flightgear
 # Sets it as executable.
-chmod +x $HOME/.local/bin/fgfs
+chmod +x $installdir/flightgear
 
 # Checking if the file was created.
-if [ -e $HOME/.local/bin/fgfs ]; then
+if [ -e $installdir/flightgear ]; then
 echo ""
 echo "#====== fgfs runner created."
 else
@@ -223,25 +223,11 @@ echo ""
 echo "#====== Something went wrong when creating fgfs runner."
 fi
 
-# TODO
-# Make script detect if the line was already added to bashrc or not
-
-# TODO
-# Maybe we should add fgfs to /usr/local/bin instead?
-
 echo ""
-echo "#====== Adding $HOME/.local/bin to your PATH."
-echo "PATH='$PATH':$HOME/.local/bin" >> $HOME/.bashrc
-# Renunning .bashrc to update PATH
-source $HOME/.bashrc
-echo ""
-echo ""
-echo ""
-echo ""
-echo "#====== Done. ~/.local/bin was added to your PATH and now you run the command fgfs."
+echo "#====== Done. Enter $installdir and run $installdir/flightgear to estar the sim. The command flightgear will take the same arguments as fgfs, such as flightgear --launcher"
 echo ""
 echo "#====== If everything went well then you can run FlightGear"
-echo "#====== by running the command fgfs or fgfs --launcher."
+echo "#====== by running the command flightgear or flightgear --launcher."
 echo ""
 echo "#====== Feel free to ask for help and contribute to this script at"
 echo "#====== https://github.com/Megaf/FlightGearBuilder "
