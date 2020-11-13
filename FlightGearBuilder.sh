@@ -198,16 +198,6 @@ make -j $ncores && echo "#====== Installing FlightGear." && make install && rm -
 echo "#====== If something went wrong when compiling FlightGear then make sure"
 echo "#====== you have all dependencies required."
 
-# This portion of the script will generate a script to launch flightgear
-# by using the standard fgfs command and it's sintaxe.
-#
-# The directory ~/.local.bin will be created and added to your PATH.
-
-# Creating directory
-echo ""
-echo "#====== Creating directory $HOME/.local/bin."
-mkdir -p $HOME/.local/bin
-
 echo ""
 echo "#====== Creating fgfs runner script."
 # Creates $installdir/flightgear
