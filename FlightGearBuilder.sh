@@ -4,7 +4,7 @@
 # set -x
 
 # FlightGearBuilder.sh
-builderversion="v0.4"
+builderversion="v0.5"
 
 # CHANGELOG
 # v0.4
@@ -22,7 +22,7 @@ builderversion="v0.4"
 ########################################################################
 #                                                                      #
 #                       FREE AS IN FREEDOM LICENSE                     #
-#                           FAIFL Version 0.4                          #
+#                           FAIFL Version 0.2                          #
 #                             October 2020                             #
 #                                                                      #
 #           Copyright (C) 2020 Megaf (https://github.com/Megaf/)       #
@@ -73,16 +73,20 @@ tempdir="/tmp/FlightGear_Sources"
 buildir="/dev/shm/FlightGear_Compiler_Output"
 
 # Compiler flags
-cflags="-m64 -march=native -mavx -mtune=core2 -O2 -pipe -mfpmath=both -flto -fomit-frame-pointer"
+cflags="-march=native -mtune=native -Os -pipe -mfpmath=both"
 buildtype="Release"
 
 # Creating directories where cmake will run from.
+rm -rf $buildir
 mkdir -p $buildir/OSG $buildir/PLIB $buildir/SimGear $buildir/FlightGear
 
 # Variables defining which branches will be used for each repository.
-fgbranch="next" # Branches for FlightHear and SimGear
-osgbranch="fgfs-342-1" # Branch for OpenSceneGraph
-osgurl="https://github.com/zakalawe/osg/" # OSG Git repo to use
+fgbranch="release/2020.3" # Branch for FlightHear
+sgbranch="release/2020.3" # Branch for SimGear
+#osgbranch="fgfs-342-1" # Branch for OpenSceneGraph
+osgbranch="OpenSceneGraph-3.6"
+#osgurl="https://github.com/zakalawe/osg/" # OSG Git repo to use
+osgurl="https://github.com/openscenegraph/OpenSceneGraph"
 ncores="$(nproc)" # Sets the number of compiler tasks according to numer of logical cpus
 
 
@@ -170,14 +174,14 @@ echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling SimGear."
-cd $buildir/SimGear && cmake $tempdir/SimGear -DCMAKE_BUILD_TYPE="$buildtype" -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/SimGear && cmake $tempdir/SimGear -DCMAKE_BUILD_TYPE="$buildtype"  -DBUILD_TESTING=OFF -DENABLE_TESTS=OFF -DENABLE_SIMD_CODE=ON -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $ncores && echo "#====== Installing SimGear." && make install&& rm -rf $buildir/SimGear
 echo "#====== If something went wrong when compiling SimGear then make sure"
 echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling FlightGear."
-cd $buildir/FlightGear && cmake $tempdir/FlightGear -DCMAKE_BUILD_TYPE="$buildtype" -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/FlightGear && cmake $tempdir/FlightGear -DCMAKE_BUILD_TYPE="$buildtype" -DSYSTEM_FLITE=OFF -DENABLE_COMPOSITOR=ON -DENABLE_AUTOTESTING=OFF -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $ncores && echo "#====== Installing FlightGear." && make install && rm -rf $buildir/FlightGear
 echo "#====== If something went wrong when compiling FlightGear then make sure"
 echo "#====== you have all dependencies required."
