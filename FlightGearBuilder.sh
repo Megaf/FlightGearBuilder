@@ -4,9 +4,12 @@
 # set -x
 
 # FlightGearBuilder.sh
-builderversion="v0.5"
 
 # CHANGELOG
+# v0.5
+# Switched OSG to OSGs official GIT repo and to branch 3.6.
+# Compiling flags are now more conservative.
+# Minor text tweaks and code changes.
 # v0.4
 # No longer downloads FlightGear data. DownloadFGdata.sh should be used for that instead.
 # v0.3
@@ -66,34 +69,33 @@ builderversion="v0.5"
 export PATH="/usr/lib/ccache:${PATH}"
 
 # Directory where everything will be installed at.
-installdir="$HOME/FlightGear"
+installdir="$HOME/FlightGear-Next"
 # Directory where the source codes will be downloaded to.
-tempdir="/tmp/FlightGear_Sources"
+tempdir="/tmp/FlightGear-Next_Sources"
 # Temporary directory where cmake will run from.
-buildir="/dev/shm/FlightGear_Compiler_Output"
+buildir="/dev/shm/FlightGear-Next_Compiler_Output"
 
 # Compiler flags
-cflags="-march=native -mtune=native -Os -pipe -mfpmath=both"
+cflags="-march=x86-64 -mtune=generic -O2 -pipe -mfpmath=both"
 buildtype="Release"
 
+rm -rf $buildir # Deleting old build files, for a clean build.
 # Creating directories where cmake will run from.
-rm -rf $buildir
 mkdir -p $buildir/OSG $buildir/PLIB $buildir/SimGear $buildir/FlightGear
 
 # Variables defining which branches will be used for each repository.
-fgbranch="release/2020.3" # Branch for FlightHear
-sgbranch="release/2020.3" # Branch for SimGear
-#osgbranch="fgfs-342-1" # Branch for OpenSceneGraph
-osgbranch="OpenSceneGraph-3.6"
-#osgurl="https://github.com/zakalawe/osg/" # OSG Git repo to use
-osgurl="https://github.com/openscenegraph/OpenSceneGraph"
+builderversion="v0.5" # Declaring build version
+fgbranch="next" # Branch for FlightHear
+sgbranch="next" # Branch for SimGear
+osgbranch="OpenSceneGraph-3.6" # Branch for OpenSceneGraph
+osgurl="https://github.com/openscenegraph/OpenSceneGraph" # OSG Repository
 ncores="$(nproc)" # Sets the number of compiler tasks according to numer of logical cpus
 
 
 ### INTRODUCTION PART
 clear
 echo "#====== Welcome to FlightGearBuilder $builderversion !"
-echo "#====== This script will download OpenSceneGraph, PLIB, SimGear and FLightGear."
+echo "#====== This script will download OpenSceneGraph, PLIB, SimGear and FlightGear."
 echo ""
 echo "#====== This script will not donwload nor update FlightGear Data. To do that,"
 echo "#====== you can run the script DownloadFGdata.sh at any time to download it."
@@ -119,7 +121,6 @@ echo "#======  OpenSceneGraph found, updating the repo if neded."
 cd $tempdir/OSG && git pull
 else
 echo "#====== OpenSceneGraph not found, downloading now."
-#git clone --depth=1 -b $osgbranch https://github.com/openscenegraph/OpenSceneGraph/ $tempdir/OSG
 git clone --depth=1 -b $osgbranch $osgurl $tempdir/OSG
 fi
 
