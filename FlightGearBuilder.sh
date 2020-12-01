@@ -10,11 +10,11 @@
 # Fix bad bad bad typos and variables declarations to flightgear runner.
 # Added Spaces and empty lines to CLI.
 # Defaulting back to release/2020.3.
+# GLVND driver is default now, before it was LEGACY.
 # v0.5
 # Switched OSG to OSGs official GIT repo and to branch 3.6.
 # Compiling flags are now more conservative.
 # Minor text tweaks and code changes.
-# GLVND driver is default now, before it was LEGACY.
 # v0.4
 # No longer downloads FlightGear data. DownloadFGdata.sh should be used for that instead.
 # v0.3
