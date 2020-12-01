@@ -6,10 +6,15 @@
 # FlightGearBuilder.sh
 
 # CHANGELOG
+# v0.6
+# Fix bad bad bad typos and variables declarations to flightgear runner.
+# Added Spaces and empty lines to CLI.
+# Defaulting back to release/2020.3.
 # v0.5
 # Switched OSG to OSGs official GIT repo and to branch 3.6.
 # Compiling flags are now more conservative.
 # Minor text tweaks and code changes.
+# GLVND driver is default now, before it was LEGACY.
 # v0.4
 # No longer downloads FlightGear data. DownloadFGdata.sh should be used for that instead.
 # v0.3
@@ -69,11 +74,11 @@
 export PATH="/usr/lib/ccache:${PATH}"
 
 # Directory where everything will be installed at.
-installdir="$HOME/FlightGear-Next"
+installdir="$HOME/FlightGearStable"
 # Directory where the source codes will be downloaded to.
-tempdir="/tmp/FlightGear-Next_Sources"
+tempdir="/tmp/FlightGearStable_Sources"
 # Temporary directory where cmake will run from.
-buildir="/dev/shm/FlightGear-Next_Compiler_Output"
+buildir="/dev/shm/FlightGearStable_Compiler_Output"
 
 # Compiler flags
 cflags="-march=x86-64 -mtune=generic -O2 -pipe -mfpmath=both"
@@ -84,16 +89,16 @@ rm -rf $buildir # Deleting old build files, for a clean build.
 mkdir -p $buildir/OSG $buildir/PLIB $buildir/SimGear $buildir/FlightGear
 
 # Variables defining which branches will be used for each repository.
-builderversion="v0.5" # Declaring build version
-fgbranch="next" # Branch for FlightHear
-sgbranch="next" # Branch for SimGear
+builderversion="v0.6" # Declaring build version
+fgbranch="release/2020.3" # Branch for FlightHear
+sgbranch="release/2020.3" # Branch for SimGear
 osgbranch="OpenSceneGraph-3.6" # Branch for OpenSceneGraph
 osgurl="https://github.com/openscenegraph/OpenSceneGraph" # OSG Repository
 ncores="$(nproc)" # Sets the number of compiler tasks according to numer of logical cpus
 
-
 ### INTRODUCTION PART
 clear
+echo ""
 echo "#====== Welcome to FlightGearBuilder $builderversion !"
 echo "#====== This script will download OpenSceneGraph, PLIB, SimGear and FlightGear."
 echo ""
@@ -161,15 +166,19 @@ fi
 # for each component.
 echo ""
 echo "#====== Compiling OpenSceneGraph."
-cd $buildir/OSG && cmake $tempdir/OSG -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/OSG && cmake $tempdir/OSG -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=GLVND -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $ncores && echo "#====== Installing OpenSceneGraph." && make install && rm -rf $buildir/OSG
+
+echo ""
 echo "#====== If something went wrong when compiling OpenSceneGraph then make sure"
 echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling PLIB."
-cd $buildir/PLIB && cmake $tempdir/PLIB -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/PLIB && cmake $tempdir/PLIB -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=GLVND -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $ncores && echo "#====== Installing PLIB." && make install&& rm -rf $buildir/PLIB
+
+echo ""
 echo "#====== If something went wrong when compiling PLIB then make sure"
 echo "#====== you have all dependencies required."
 
@@ -182,8 +191,10 @@ echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling FlightGear."
-cd $buildir/FlightGear && cmake $tempdir/FlightGear -DCMAKE_BUILD_TYPE="$buildtype" -DSYSTEM_FLITE=OFF -DENABLE_COMPOSITOR=ON -DENABLE_AUTOTESTING=OFF -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/FlightGear && cmake $tempdir/FlightGear -DCMAKE_BUILD_TYPE="$buildtype" -DSYSTEM_FLITE=OFF -DENABLE_AUTOTESTING=OFF -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $ncores && echo "#====== Installing FlightGear." && make install && rm -rf $buildir/FlightGear
+
+echo ""
 echo "#====== If something went wrong when compiling FlightGear then make sure"
 echo "#====== you have all dependencies required."
 
@@ -192,9 +203,9 @@ echo "#====== Creating fgfs runner script."
 # Creates $installdir/flightgear
 cat << EOF > $installdir/flightgear
 #!/bin/bash
-export LD_LIBRARY_PATH=$installdir/lib:$installdir/lib64:$PATH
-export FG HOME=$installdir/FG_HOME
-export FG ROOT=$installdir/data
+export LD_LIBRARY_PATH=$installdir/lib
+export FG_HOME=$installdir/FG_HOME
+export FG_ROOT=$installdir/data
 cd $installdir/bin
 EOF
 
@@ -205,6 +216,7 @@ chmod +x $installdir/flightgear
 
 # Checking if the file was created.
 if [ -e $installdir/flightgear ]; then
+
 echo ""
 echo "#====== fgfs runner created."
 else
