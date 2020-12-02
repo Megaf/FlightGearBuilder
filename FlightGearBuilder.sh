@@ -6,6 +6,12 @@
 # FlightGearBuilder.sh
 
 # CHANGELOG
+# v0.7.20201202
+# OSG broken with GLNV, reverting back to LEGACY.
+# Fix some typos.
+# Removing script to download FGData. Alternative will be given in the text interface.
+# Including release date with release version.
+# Now some clean up is done prior running the script, for cleaner builds.
 # v0.6
 # Fix bad bad bad typos and variables declarations to flightgear runner.
 # Added Spaces and empty lines to CLI.
@@ -85,11 +91,12 @@ cflags="-march=x86-64 -mtune=generic -O2 -pipe -mfpmath=both"
 buildtype="Release"
 
 rm -rf $buildir # Deleting old build files, for a clean build.
+rm -rf $installdir/bin $installdir/lib $installdir/include # Delete old installed binaries and libs.
 # Creating directories where cmake will run from.
 mkdir -p $buildir/OSG $buildir/PLIB $buildir/SimGear $buildir/FlightGear
 
 # Variables defining which branches will be used for each repository.
-builderversion="v0.6" # Declaring build version
+builderversion="v0.7.20201202" # Declaring build version
 fgbranch="release/2020.3" # Branch for FlightHear
 sgbranch="release/2020.3" # Branch for SimGear
 osgbranch="OpenSceneGraph-3.6" # Branch for OpenSceneGraph
@@ -103,9 +110,13 @@ echo "#====== Welcome to FlightGearBuilder $builderversion !"
 echo "#====== This script will download OpenSceneGraph, PLIB, SimGear and FlightGear."
 echo ""
 echo "#====== This script will not donwload nor update FlightGear Data. To do that,"
-echo "#====== you can run the script DownloadFGdata.sh at any time to download it."
+echo "#====== you can either download the correct version from http://download.flightgear.org/builds/ "
+echo "#====== For example, the file FlightGear-2020.3.4-data.tar.bz2"
 echo ""
+echo "#====== Or you can use git clone -b version (next for testing or correct version, like release/2020.3) git://git.code.sf.net/p/flightgear/fgdata "
 # Waits for the user to press a key to continue.
+echo ""
+echo ""
 echo "#====== Press any key to continue."
 read -rsn1
 clear
@@ -225,7 +236,8 @@ echo "#====== Something went wrong when creating fgfs runner."
 fi
 
 echo ""
-echo "#====== Done. Enter $installdir and run $installdir/flightgear to estar the sim. The command flightgear will take the same arguments as fgfs, such as flightgear --launcher"
+echo "#====== Done. Enter $installdir and run $installdir/flightgear to start the sim."
+echo "#====== The command flightgear will take the same arguments as fgfs, such as flightgear --launcher" 
 echo ""
 echo "#====== If everything went well then you can run FlightGear"
 echo "#====== by running the command flightgear or flightgear --launcher."
