@@ -10,4 +10,4 @@ Download the script, make it executable with chmod +x FlightGearBuilder.sh and r
 ## Where is FlightGear Installed to?
 By default the script will install to ~/FlightGear
 ## How to I run FlightGear?
-If everything wel well, you can type fgfs in the terminal or fgfs --launcher.
+If everything wel well, you can run ./flightgear --launcher from ~/FlightGear-Stable.
