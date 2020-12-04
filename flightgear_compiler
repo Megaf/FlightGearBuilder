@@ -42,12 +42,8 @@
 ########################################################################
 
 ### ABOUT THIS SOFTWARE
-# This script will download, from Git repositories, the source code for
-# the OpenSceneGraph, PLIB, SimGear libraries and
-# FlightGear Flight Simulator.
-#
-# After that, everything will be compiled from scratch according to
-# the flags and variables set bellow.
+# This script will compile from the source code OpenSceneGraph, PLIB, SimGear libraries and FlightGear Flight Simulator.
+# Using the flags and variables set bellow.
 
 # Uses ccache (https://ccache.dev/) if it's available, to speed rebuilds
 export PATH="/usr/lib/ccache:${PATH}"
