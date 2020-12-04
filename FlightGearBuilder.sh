@@ -6,6 +6,9 @@
 # FlightGearBuilder.sh
 
 # CHANGELOG
+# v0.8.20201204
+# Added more code comments.
+# Changed EOF section to add fgfs runner in one step.
 # v0.7.20201202
 # OSG broken with GLNV, reverting back to LEGACY.
 # Fix some typos.
@@ -87,8 +90,8 @@ tempdir="/tmp/FlightGearStable_Sources"
 buildir="/dev/shm/FlightGearStable_Compiler_Output"
 
 # Compiler flags
-cflags="-march=x86-64 -mtune=generic -O2 -pipe -mfpmath=both"
-buildtype="Release"
+cflags="-march=x86-64 -mtune=generic -O2 -pipe -mfpmath=both" # Replace x86064 and generic with native for more optimization. Leave it as it is to run in other CPUs.
+buildtype="Release" # Build type, Release for better performance. All flags in this script are for Release type.
 
 rm -rf $buildir # Deleting old build files, for a clean build.
 rm -rf $installdir/bin $installdir/lib $installdir/include # Delete old installed binaries and libs.
@@ -96,12 +99,12 @@ rm -rf $installdir/bin $installdir/lib $installdir/include # Delete old installe
 mkdir -p $buildir/OSG $buildir/PLIB $buildir/SimGear $buildir/FlightGear
 
 # Variables defining which branches will be used for each repository.
-builderversion="v0.7.20201202" # Declaring build version
+builderversion="v0.7.20201204" # Declaring build version
 fgbranch="release/2020.3" # Branch for FlightHear
 sgbranch="release/2020.3" # Branch for SimGear
 osgbranch="OpenSceneGraph-3.6" # Branch for OpenSceneGraph
 osgurl="https://github.com/openscenegraph/OpenSceneGraph" # OSG Repository
-ncores="$(nproc)" # Sets the number of compiler tasks according to numer of logical cpus
+ncores="$(nproc)" # Sets the number of compiler tasks according to number of logical cpus in your system
 
 ### INTRODUCTION PART
 clear
@@ -134,10 +137,10 @@ echo ""
 echo "#====== Checking if OpenSceneGraph was already downloaded."
 if [ -d "$tempdir/OSG" ]; then
 echo "#======  OpenSceneGraph found, updating the repo if neded."
-cd $tempdir/OSG && git pull
+cd $tempdir/OSG && git pull # Try to update existing previously cloned repo.
 else
 echo "#====== OpenSceneGraph not found, downloading now."
-git clone --depth=1 -b $osgbranch $osgurl $tempdir/OSG
+git clone --depth=1 -b $osgbranch $osgurl $tempdir/OSG # Clone repo from Git
 fi
 
 # Checking PLIB
@@ -145,10 +148,10 @@ echo ""
 echo "#====== Checking if PLIB was already downloaded."
 if [ -d "$tempdir/PLIB" ]; then
 echo "#======  PLIB found, updating the repo if neded."
-cd $tempdir/PLIB && git pull
+cd $tempdir/PLIB && git pull # Try to update existing previously cloned repo.
 else
 echo "#====== PLIB not found, downloading now."
-git clone --depth=1 https://git.code.sf.net/p/libplib/code $tempdir/PLIB
+git clone --depth=1 https://git.code.sf.net/p/libplib/code $tempdir/PLIB # Clone repo from Git
 fi
 
 # Checking SimGear
@@ -156,10 +159,10 @@ echo ""
 echo "#====== Checking if SimGear was already downloaded."
 if [ -d "$tempdir/SimGear" ]; then
 echo "#======  SimGear found, updating the repo if neded."
-cd $tempdir/SimGear && git pull
+cd $tempdir/SimGear && git pull # Try to update existing previously cloned repo.
 else
 echo "#====== SimGear not found, downloading now."
-git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/simgear $tempdir/SimGear
+git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/simgear $tempdir/SimGear # Clone repo from Git
 fi
 
 # Checking FlightGear
@@ -167,14 +170,13 @@ echo ""
 echo "#====== Checking if FlightGear was already downloaded."
 if [ -d "$tempdir/FlightGear" ]; then
 echo "#======  FlightGear found, updating the repo if neded."
-cd $tempdir/FlightGear && git pull
+cd $tempdir/FlightGear && git pull # Try to update existing previously cloned repo.
 else
 echo "#====== FlightGear not found, downloading now."
-git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/flightgear $tempdir/FlightGear
+git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/flightgear $tempdir/FlightGear # Clone repo from Git
 fi
 
-# Now the script will run cmake and make and make install
-# for each component.
+# Now the script will run cmake and make and make install for each component.
 echo ""
 echo "#====== Compiling OpenSceneGraph."
 cd $buildir/OSG && cmake $tempdir/OSG -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
@@ -211,19 +213,20 @@ echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Creating fgfs runner script."
+
+# Creates $installdir/flightgear
+# To learn more about fg home and root read http://wiki.flightgear.org/$FG_HOME and http://wiki.flightgear.org/$FG_ROOT
+ 
 # Creates $installdir/flightgear
 cat << EOF > $installdir/flightgear
 #!/bin/bash
 export LD_LIBRARY_PATH=$installdir/lib
 export FG_HOME=$installdir/FG_HOME
 export FG_ROOT=$installdir/data
-cd $installdir/bin
+$installdir/bin/fgfs \$*
 EOF
 
-# Adds the launcher line to that script.
-echo './fgfs $*' >> $installdir/flightgear
-# Sets it as executable.
-chmod +x $installdir/flightgear
+chmod +x $installdir/flightgear # Sets it as executable
 
 # Checking if the file was created.
 if [ -e $installdir/flightgear ]; then
