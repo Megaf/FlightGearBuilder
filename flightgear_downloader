@@ -2,13 +2,6 @@
 
 # flightgear_downloader
 
-# CHANGELOG
-# v1.0.2020.12.04
-# Small change in version numbering.
-# First stable version.
-# Script file renamed to flightgear_builder.
-# Script split in two parts, flightgear_builder which will compile FlightGear from source and flightgear_downloader which will only download and update the source.
-
 ### AUTHOR
 # This software was created by Megaf - https://github.com/Megaf
 # On the 20/10/2020
@@ -58,6 +51,7 @@ fgbranch="release/2020.3" # Branch for FlightHear
 sgbranch="release/2020.3" # Branch for SimGear
 osgbranch="OpenSceneGraph-3.6" # Branch for OpenSceneGraph
 osgurl="https://github.com/openscenegraph/OpenSceneGraph" # OSG Repository
+version="$(cat VERSION)"
 
 ### CHECKS AND GIT CLONE
 # We will perform a series of checks to see if the repos were cloned
@@ -67,7 +61,7 @@ osgurl="https://github.com/openscenegraph/OpenSceneGraph" # OSG Repository
 ### INTRODUCTION PART
 clear
 echo ""
-echo "#====== Welcome to FlightGear Downloader $builderversion !"
+echo "#====== Welcome to FlightGear Downloader $version !"
 echo "#====== This script will download OpenSceneGraph, PLIB, SimGear and FlightGear."
 echo ""
 echo "#====== This script will not donwload nor update FlightGear Data. To do that,"
@@ -83,7 +77,7 @@ read -rsn1
 clear
 
 echo ""
-echo "#====== Downloading Source Codes and Building Started."
+echo "#====== Downloading Source Codes Started."
 
 # Checking OpenSceneGraph
 echo ""

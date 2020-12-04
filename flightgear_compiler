@@ -2,37 +2,6 @@
 
 # FlightGearBuilder.sh
 
-# CHANGELOG
-# v1.0.2020.12.04
-# Small change in version numbering.
-# First stable version.
-# Script file renamed to flightgear_builder.
-# Script split in two parts, flightgear_builder which will compile FlightGear from source and flightgear_downloader which will only download and update the source.
-# v0.8.20201204
-# Added more code comments.
-# Changed EOF section to add fgfs runner in one step.
-# v0.7.20201202
-# OSG broken with GLNV, reverting back to LEGACY.
-# Fix some typos.
-# Removing script to download FGData. Alternative will be given in the text interface.
-# Including release date with release version.
-# Now some clean up is done prior running the script, for cleaner builds.
-# v0.6
-# Fix bad bad bad typos and variables declarations to flightgear runner.
-# Added Spaces and empty lines to CLI.
-# Defaulting back to release/2020.3.
-# GLVND driver is default now, before it was LEGACY.
-# v0.5
-# Switched OSG to OSGs official GIT repo and to branch 3.6.
-# Compiling flags are now more conservative.
-# Minor text tweaks and code changes.
-# v0.4
-# No longer downloads FlightGear data. DownloadFGdata.sh should be used for that instead.
-# v0.3
-# No longer creates launcher at .local/bin and no longer changes PATH.
-# Moved some OSD git URL to variable.
-# Moved nproc to variable.
-
 ### AUTHOR
 # This software was created by Megaf - https://github.com/Megaf
 # On the 20/10/2020
@@ -89,6 +58,7 @@ installdir="$HOME/FlightGear"
 tempdir="/tmp/FlightGear_Sources"
 # Temporary directory where cmake will run from.
 buildir="/dev/shm/FlightGear_Compiler_Output"
+version="$(cat VERSION)"
 
 # Compiler flags
 cflags="-march=x86-64 -mtune=generic -O2 -pipe -mfpmath=both" # Replace x86064 and generic with native for more optimization. Leave it as it is to run in other CPUs.
@@ -100,13 +70,12 @@ rm -rf $installdir/bin $installdir/lib $installdir/include # Delete old installe
 mkdir -p $buildir/OSG $buildir/PLIB $buildir/SimGear $buildir/FlightGear
 
 # Variables defining which branches will be used for each repository.
-builderversion="v0.7.20201204" # Declaring build version
 ncores="$(nproc)" # Sets the number of compiler tasks according to number of logical cpus in your system
 
 ### INTRODUCTION PART
 clear
 echo ""
-echo "#====== Welcome to FlightGearBuilder $builderversion !"
+echo "#====== Welcome to FlightGearBuilder $version !"
 echo "#====== This script will compile OpenSceneGraph, PLIB, SimGear and FlightGear."
 
 # Waits for the user to press a key to continue.
