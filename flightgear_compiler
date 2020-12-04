@@ -3,6 +3,11 @@
 # FlightGearBuilder.sh
 
 # CHANGELOG
+# v1.0.2020.12.04
+# Small change in version numbering.
+# First stable version.
+# Script file renamed to flightgear_builder.
+# Script split in two parts, flightgear_builder which will compile FlightGear from source and flightgear_downloader which will only download and update the source.
 # v0.8.20201204
 # Added more code comments.
 # Changed EOF section to add fgfs runner in one step.
@@ -75,7 +80,6 @@
 # After that, everything will be compiled from scratch according to
 # the flags and variables set bellow.
 
-
 # Uses ccache (https://ccache.dev/) if it's available, to speed rebuilds
 export PATH="/usr/lib/ccache:${PATH}"
 
@@ -97,23 +101,14 @@ mkdir -p $buildir/OSG $buildir/PLIB $buildir/SimGear $buildir/FlightGear
 
 # Variables defining which branches will be used for each repository.
 builderversion="v0.7.20201204" # Declaring build version
-fgbranch="release/2020.3" # Branch for FlightHear
-sgbranch="release/2020.3" # Branch for SimGear
-osgbranch="OpenSceneGraph-3.6" # Branch for OpenSceneGraph
-osgurl="https://github.com/openscenegraph/OpenSceneGraph" # OSG Repository
 ncores="$(nproc)" # Sets the number of compiler tasks according to number of logical cpus in your system
 
 ### INTRODUCTION PART
 clear
 echo ""
 echo "#====== Welcome to FlightGearBuilder $builderversion !"
-echo "#====== This script will download OpenSceneGraph, PLIB, SimGear and FlightGear."
-echo ""
-echo "#====== This script will not donwload nor update FlightGear Data. To do that,"
-echo "#====== you can either download the correct version from http://download.flightgear.org/builds/ "
-echo "#====== For example, the file FlightGear-2020.3.4-data.tar.bz2"
-echo ""
-echo "#====== Or you can use git clone -b version (next for testing or correct version, like release/2020.3) git://git.code.sf.net/p/flightgear/fgdata "
+echo "#====== This script will compile OpenSceneGraph, PLIB, SimGear and FlightGear."
+
 # Waits for the user to press a key to continue.
 echo ""
 echo ""
@@ -121,57 +116,8 @@ echo "#====== Press any key to continue."
 read -rsn1
 clear
 
-### CHECKS AND GIT CLONE
-# We will perform a series of checks to see if the repos were cloned
-# already or not, if they were not cloned yet, then git clone will run,
-# Otherwise, the script will try to update, git pull, the repos.
-
-echo ""
-echo "#====== Downloading Source Codes and Building Started."
-
-# Checking OpenSceneGraph
-echo ""
-echo "#====== Checking if OpenSceneGraph was already downloaded."
-if [ -d "$tempdir/OSG" ]; then
-echo "#======  OpenSceneGraph found, updating the repo if neded."
-cd $tempdir/OSG && git pull # Try to update existing previously cloned repo.
-else
-echo "#====== OpenSceneGraph not found, downloading now."
-git clone --depth=1 -b $osgbranch $osgurl $tempdir/OSG # Clone repo from Git
-fi
-
-# Checking PLIB
-echo ""
-echo "#====== Checking if PLIB was already downloaded."
-if [ -d "$tempdir/PLIB" ]; then
-echo "#======  PLIB found, updating the repo if neded."
-cd $tempdir/PLIB && git pull # Try to update existing previously cloned repo.
-else
-echo "#====== PLIB not found, downloading now."
-git clone --depth=1 https://git.code.sf.net/p/libplib/code $tempdir/PLIB # Clone repo from Git
-fi
-
-# Checking SimGear
-echo ""
-echo "#====== Checking if SimGear was already downloaded."
-if [ -d "$tempdir/SimGear" ]; then
-echo "#======  SimGear found, updating the repo if neded."
-cd $tempdir/SimGear && git pull # Try to update existing previously cloned repo.
-else
-echo "#====== SimGear not found, downloading now."
-git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/simgear $tempdir/SimGear # Clone repo from Git
-fi
-
-# Checking FlightGear
-echo ""
-echo "#====== Checking if FlightGear was already downloaded."
-if [ -d "$tempdir/FlightGear" ]; then
-echo "#======  FlightGear found, updating the repo if neded."
-cd $tempdir/FlightGear && git pull # Try to update existing previously cloned repo.
-else
-echo "#====== FlightGear not found, downloading now."
-git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/flightgear $tempdir/FlightGear # Clone repo from Git
-fi
+# TODO
+# Add checks to see if everything is downloaded/present.
 
 # Now the script will run cmake and make and make install for each component.
 echo ""
@@ -240,7 +186,7 @@ echo "#====== Done. Enter $installdir and run $installdir/flightgear to start th
 echo "#====== The command flightgear will take the same arguments as fgfs, such as flightgear --launcher" 
 echo ""
 echo "#====== If everything went well then you can run FlightGear"
-echo "#====== by running the command flightgear or flightgear --launcher."
+echo "#====== by running the command ./flightgear or ./flightgear --launcher."
 echo ""
 echo "#====== Feel free to ask for help and contribute to this script at"
 echo "#====== https://github.com/Megaf/FlightGearBuilder "
