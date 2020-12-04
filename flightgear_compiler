@@ -57,7 +57,7 @@ buildir="/dev/shm/FlightGear_Compiler_Output"
 version="$(cat VERSION)"
 
 # Compiler flags
-cflags="-march=x86-64 -mtune=generic -O2 -pipe -mfpmath=both" # Replace x86064 and generic with native for more optimization. Leave it as it is to run in other CPUs.
+cflags="-march=native -mtune=native -O3 -pipe -mfpmath=both"
 buildtype="Release" # Build type, Release for better performance. All flags in this script are for Release type.
 
 rm -rf $buildir # Deleting old build files, for a clean build.
