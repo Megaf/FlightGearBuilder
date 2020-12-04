@@ -1,6 +1,9 @@
 #!/bin/bash
 
+### ABOUT
 # flightgear_downloader
+# This script will download, from Git repositories, the source code for
+# the OpenSceneGraph, PLIB, SimGear libraries and FlightGear Flight Simulator.
 
 ### AUTHOR
 # This software was created by Megaf - https://github.com/Megaf
@@ -40,11 +43,6 @@
 # at all.                                                              #
 #                                                                      #
 ########################################################################
-
-### ABOUT THIS SOFTWARE
-# This script will download, from Git repositories, the source code for
-# the OpenSceneGraph, PLIB, SimGear libraries and
-# FlightGear Flight Simulator.
 
 download_dir="/tmp/FlightGear_Sources" # Directory where the source codes will be downloaded to.
 fgbranch="release/2020.3" # Branch for FlightHear
