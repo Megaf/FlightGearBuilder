@@ -53,6 +53,13 @@ osgbranch="OpenSceneGraph-3.6" # Branch for OpenSceneGraph
 osgurl="https://github.com/openscenegraph/OpenSceneGraph" # OSG Repository
 version="$(cat VERSION)"
 
+# Adds option to let user download and build the next/testing version of FlightGear
+if [ "$*" = "--next" ]; then
+	fgbranch="next"
+	sgbranch="next"
+	osgbranch="master"
+fi
+
 ### CHECKS AND GIT CLONE
 # We will perform a series of checks to see if the repos were cloned
 # already or not, if they were not cloned yet, then git clone will run,
@@ -71,6 +78,8 @@ echo ""
 echo "#====== Or you can use git clone -b version (next for testing or correct version, like release/2020.3) git://git.code.sf.net/p/flightgear/fgdata "
 # Waits for the user to press a key to continue.
 echo ""
+echo "======= Run this script with the flag --next to build the testing/next version of FlightGear."
+echo "======= Selected FlighthGear version is $fgbranch"
 echo ""
 echo "#====== Press any key to continue."
 read -rsn1
