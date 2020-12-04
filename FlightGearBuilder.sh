@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Uncomment to enable "debugging" of the script
-# set -x
-
 # FlightGearBuilder.sh
 
 # CHANGELOG
@@ -83,11 +80,11 @@
 export PATH="/usr/lib/ccache:${PATH}"
 
 # Directory where everything will be installed at.
-installdir="$HOME/FlightGearStable"
+installdir="$HOME/FlightGear"
 # Directory where the source codes will be downloaded to.
-tempdir="/tmp/FlightGearStable_Sources"
+tempdir="/tmp/FlightGear_Sources"
 # Temporary directory where cmake will run from.
-buildir="/dev/shm/FlightGearStable_Compiler_Output"
+buildir="/dev/shm/FlightGear_Compiler_Output"
 
 # Compiler flags
 cflags="-march=x86-64 -mtune=generic -O2 -pipe -mfpmath=both" # Replace x86064 and generic with native for more optimization. Leave it as it is to run in other CPUs.
