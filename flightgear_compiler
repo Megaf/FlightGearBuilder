@@ -51,7 +51,7 @@ export PATH="/usr/lib/ccache:${PATH}"
 # Directory where everything will be installed at.
 installdir="$HOME/FlightGear"
 # Directory where the source codes will be downloaded to.
-tempdir="/tmp/FlightGear_Sources"
+download_dir="/tmp/FlightGear_Sources"
 # Temporary directory where cmake will run from.
 buildir="/dev/shm/FlightGear_Compiler_Output"
 version="$(cat VERSION)"
@@ -87,7 +87,7 @@ clear
 # Now the script will run cmake and make and make install for each component.
 echo ""
 echo "#====== Compiling OpenSceneGraph."
-cd $buildir/OSG && cmake $tempdir/OSG -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/OSG && cmake $download_dir/OSG -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $ncores && echo "#====== Installing OpenSceneGraph." && make install && rm -rf $buildir/OSG
 
 echo ""
@@ -96,7 +96,7 @@ echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling PLIB."
-cd $buildir/PLIB && cmake $tempdir/PLIB -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/PLIB && cmake $download_dir/PLIB -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $ncores && echo "#====== Installing PLIB." && make install&& rm -rf $buildir/PLIB
 
 echo ""
@@ -105,14 +105,14 @@ echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling SimGear."
-cd $buildir/SimGear && cmake $tempdir/SimGear -DCMAKE_BUILD_TYPE="$buildtype"  -DBUILD_TESTING=OFF -DENABLE_TESTS=OFF -DENABLE_SIMD_CODE=ON -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/SimGear && cmake $download_dir/SimGear -DCMAKE_BUILD_TYPE="$buildtype"  -DBUILD_TESTING=OFF -DENABLE_TESTS=OFF -DENABLE_SIMD_CODE=ON -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $ncores && echo "#====== Installing SimGear." && make install&& rm -rf $buildir/SimGear
 echo "#====== If something went wrong when compiling SimGear then make sure"
 echo "#====== you have all dependencies required."
 
 echo ""
 echo "#====== Compiling FlightGear."
-cd $buildir/FlightGear && cmake $tempdir/FlightGear -DCMAKE_BUILD_TYPE="$buildtype" -DSYSTEM_FLITE=OFF -DENABLE_AUTOTESTING=OFF -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
+cd $buildir/FlightGear && cmake $download_dir/FlightGear -DCMAKE_BUILD_TYPE="$buildtype" -DSYSTEM_FLITE=OFF -DENABLE_AUTOTESTING=OFF -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
 make -j $ncores && echo "#====== Installing FlightGear." && make install && rm -rf $buildir/FlightGear
 
 echo ""

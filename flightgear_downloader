@@ -46,7 +46,7 @@
 # the OpenSceneGraph, PLIB, SimGear libraries and
 # FlightGear Flight Simulator.
 
-tempdir="/tmp/FlightGear_Sources" # Directory where the source codes will be downloaded to.
+download_dir="/tmp/FlightGear_Sources" # Directory where the source codes will be downloaded to.
 fgbranch="release/2020.3" # Branch for FlightHear
 sgbranch="release/2020.3" # Branch for SimGear
 osgbranch="OpenSceneGraph-3.6" # Branch for OpenSceneGraph
@@ -91,45 +91,45 @@ echo "#====== Downloading Source Codes Started."
 # Checking OpenSceneGraph
 echo ""
 echo "#====== Checking if OpenSceneGraph was already downloaded."
-if [ -d "$tempdir/OSG" ]; then
+if [ -d "$download_dir/OSG" ]; then
 echo "#======  OpenSceneGraph found, updating the repo if neded."
-cd $tempdir/OSG && git pull # Try to update existing previously cloned repo.
+cd $download_dir/OSG && git pull # Try to update existing previously cloned repo.
 else
 echo "#====== OpenSceneGraph not found, downloading now."
-git clone --depth=1 -b $osgbranch $osgurl $tempdir/OSG # Clone repo from Git
+git clone --depth=1 -b $osgbranch $osgurl $download_dir/OSG # Clone repo from Git
 fi
 
 # Checking PLIB
 echo ""
 echo "#====== Checking if PLIB was already downloaded."
-if [ -d "$tempdir/PLIB" ]; then
+if [ -d "$download_dir/PLIB" ]; then
 echo "#======  PLIB found, updating the repo if neded."
-cd $tempdir/PLIB && git pull # Try to update existing previously cloned repo.
+cd $download_dir/PLIB && git pull # Try to update existing previously cloned repo.
 else
 echo "#====== PLIB not found, downloading now."
-git clone --depth=1 https://git.code.sf.net/p/libplib/code $tempdir/PLIB # Clone repo from Git
+git clone --depth=1 https://git.code.sf.net/p/libplib/code $download_dir/PLIB # Clone repo from Git
 fi
 
 # Checking SimGear
 echo ""
 echo "#====== Checking if SimGear was already downloaded."
-if [ -d "$tempdir/SimGear" ]; then
+if [ -d "$download_dir/SimGear" ]; then
 echo "#======  SimGear found, updating the repo if neded."
-cd $tempdir/SimGear && git pull # Try to update existing previously cloned repo.
+cd $download_dir/SimGear && git pull # Try to update existing previously cloned repo.
 else
 echo "#====== SimGear not found, downloading now."
-git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/simgear $tempdir/SimGear # Clone repo from Git
+git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/simgear $download_dir/SimGear # Clone repo from Git
 fi
 
 # Checking FlightGear
 echo ""
 echo "#====== Checking if FlightGear was already downloaded."
-if [ -d "$tempdir/FlightGear" ]; then
+if [ -d "$download_dir/FlightGear" ]; then
 echo "#======  FlightGear found, updating the repo if neded."
-cd $tempdir/FlightGear && git pull # Try to update existing previously cloned repo.
+cd $download_dir/FlightGear && git pull # Try to update existing previously cloned repo.
 else
 echo "#====== FlightGear not found, downloading now."
-git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/flightgear $tempdir/FlightGear # Clone repo from Git
+git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/flightgear $download_dir/FlightGear # Clone repo from Git
 fi
 
 echo ""
