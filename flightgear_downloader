@@ -53,10 +53,11 @@
 # the OpenSceneGraph, PLIB, SimGear libraries and
 # FlightGear Flight Simulator.
 
-# Directory where everything will be installed at.
-installdir="$HOME/FlightGear"
-# Directory where the source codes will be downloaded to.
-tempdir="/tmp/FlightGear_Sources"
+tempdir="/tmp/FlightGear_Sources" # Directory where the source codes will be downloaded to.
+fgbranch="release/2020.3" # Branch for FlightHear
+sgbranch="release/2020.3" # Branch for SimGear
+osgbranch="OpenSceneGraph-3.6" # Branch for OpenSceneGraph
+osgurl="https://github.com/openscenegraph/OpenSceneGraph" # OSG Repository
 
 ### CHECKS AND GIT CLONE
 # We will perform a series of checks to see if the repos were cloned
