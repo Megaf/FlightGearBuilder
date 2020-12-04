@@ -1,6 +1,7 @@
 # CHANGELOG
 
 # v1.0.2020.12.04
+# tempdir variable renamed to download_dir
 # User now able to select next/testing version instead of stable.
 # Changelog moved to CHANGELOG file.
 # builderversion renamed to version and moved to VERSION file.
