@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# FlightGearBuilder.sh
+### ABOUT
+# flightgear_compiler
+# This script will compile from the source code OpenSceneGraph, PLIB, SimGear libraries and FlightGear Flight Simulator.
 
 ### AUTHOR
 # This software was created by Megaf - https://github.com/Megaf
@@ -41,10 +43,6 @@
 #                                                                      #
 ########################################################################
 
-### ABOUT THIS SOFTWARE
-# This script will compile from the source code OpenSceneGraph, PLIB, SimGear libraries and FlightGear Flight Simulator.
-# Using the flags and variables set bellow.
-
 # Uses ccache (https://ccache.dev/) if it's available, to speed rebuilds
 export PATH="/usr/lib/ccache:${PATH}"
 
@@ -60,7 +58,6 @@ version="$(cat VERSION)"
 cflags="-march=native -mtune=native -O3 -pipe -mfpmath=both"
 buildtype="Release" # Build type, Release for better performance. All flags in this script are for Release type.
 
-rm -rf $buildir # Deleting old build files, for a clean build.
 rm -rf $installdir/bin $installdir/lib $installdir/include # Delete old installed binaries and libs.
 # Creating directories where cmake will run from.
 mkdir -p $buildir/OSG $buildir/PLIB $buildir/SimGear $buildir/FlightGear
@@ -75,7 +72,6 @@ echo "#====== Welcome to FlightGearBuilder $version !"
 echo "#====== This script will compile OpenSceneGraph, PLIB, SimGear and FlightGear."
 
 # Waits for the user to press a key to continue.
-echo ""
 echo ""
 echo "#====== Press any key to continue."
 read -rsn1
@@ -136,16 +132,6 @@ $installdir/bin/fgfs \$*
 EOF
 
 chmod +x $installdir/flightgear # Sets it as executable
-
-# Checking if the file was created.
-if [ -e $installdir/flightgear ]; then
-
-echo ""
-echo "#====== fgfs runner created."
-else
-echo ""
-echo "#====== Something went wrong when creating fgfs runner."
-fi
 
 echo ""
 echo "#====== Done. Enter $installdir and run $installdir/flightgear to start the sim."
