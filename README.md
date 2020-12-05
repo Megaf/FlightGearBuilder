@@ -10,6 +10,7 @@ By default it will build the latest development version of SimGear and FlightGea
 
 #### Installing FlightGear
 Download the script run it with ./flightgear_downloader and then ./flightgear_compiler.
+Add "--next" flag if you want to download the very latest testing version of FlightGear.
 
 #### Uninstalling FlightGear
 Run ./flightgear_uninstaller.
