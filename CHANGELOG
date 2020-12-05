@@ -1,0 +1,49 @@
+# CHANGELOG
+
+# v1.0.2020.12.05
+# Added an uninstaller.
+# Code tweaks.
+# First stable version.
+# Tells user to press ctrl c to quit the script.
+# Updated README.md to reflect changes done to this version.
+
+# v1.0.2020.12.04
+# build cpu type set to native, O flag to O3
+# tempdir variable renamed to download_dir
+# User now able to select next/testing version instead of stable.
+# Changelog moved to CHANGELOG file.
+# builderversion renamed to version and moved to VERSION file.
+# Small change in version numbering.
+# First stable version.
+# Script file renamed to flightgear_builder.
+# Script split in two parts, flightgear_builder which will compile FlightGear from source and flightgear_downloader which will only download and update the source.
+
+# v0.8.20201204
+# Added more code comments.
+# Changed EOF section to add fgfs runner in one step.
+
+# v0.7.20201202
+# OSG broken with GLNV, reverting back to LEGACY.
+# Fix some typos.
+# Removing script to download FGData. Alternative will be given in the text interface.
+# Including release date with release version.
+# Now some clean up is done prior running the script, for cleaner builds.
+
+# v0.6
+# Fix bad bad bad typos and variables declarations to flightgear runner.
+# Added Spaces and empty lines to CLI.
+# Defaulting back to release/2020.3.
+# GLVND driver is default now, before it was LEGACY.
+
+# v0.5
+# Switched OSG to OSGs official GIT repo and to branch 3.6.
+# Compiling flags are now more conservative.
+# Minor text tweaks and code changes.
+
+# v0.4
+# No longer downloads FlightGear data. DownloadFGdata.sh should be used for that instead.
+
+# v0.3
+# No longer creates launcher at .local/bin and no longer changes PATH.
+# Moved some OSD git URL to variable.
+# Moved nproc to variable.

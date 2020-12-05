@@ -1,0 +1,143 @@
+#!/bin/bash
+
+### ABOUT
+# flightgear_downloader
+# This script will download, from Git repositories, the source code for
+# the OpenSceneGraph, PLIB, SimGear libraries and FlightGear Flight Simulator.
+
+### AUTHOR
+# This software was created by Megaf - https://github.com/Megaf
+# On the 20/10/2020
+
+### LICENSE
+########################################################################
+#                                                                      #
+#                       FREE AS IN FREEDOM LICENSE                     #
+#                           FAIFL Version 0.2                          #
+#                             October 2020                             #
+#                                                                      #
+#           Copyright (C) 2020 Megaf (https://github.com/Megaf/)       #
+#                     <mmegaf [at] gmail [dot] com>                    #
+#                                                                      #
+# Everyone, anyone, anything or any company or organization, human,    #
+# plant, apache helicopter, alive or not, form of life or not, is/are  #
+# allowed to copy, modify, distribute, change, charge or do anything   #
+# they/ones want with anything or whatever this license is, attached   #
+# to or licensing.                                                     #
+#                                                                      #
+# This thing, software, hardware, piece, object, art, or whatever that #
+# is been licensed under FAIFL (Free As In Freedom License) can be     #
+# used, shared, copied, sold, modified, changed, adapted, or whatever  #
+# you want to do as long as the following terms are understood and met.#
+#                                                                      #
+# (1) This that is licensed under FAIFL comes as it is.                #
+# (2) This that is licensed under FAIFL it is not covered under any    #
+# warranty.                                                            #
+# (3) There is no warranty or guarantee that this that is licensed     #
+# under FAIFL works at all.                                            #
+# (4) This that is licensed under FAIFL may be dangerous and cause     #
+# harm and loss of property.                                           #
+# (5) Changing this license is not allowed.                            #
+# (6) The creator, owner, author of this that is licensed under FAIFL  #
+# shall not be liable,responsible or accused in any way for anything   #
+# at all.                                                              #
+#                                                                      #
+########################################################################
+
+download_dir="/tmp/FlightGear_Sources" # Directory where the source codes will be downloaded to.
+fgbranch="release/2020.3" # Branch for FlightHear
+sgbranch="release/2020.3" # Branch for SimGear
+osgbranch="OpenSceneGraph-3.6" # Branch for OpenSceneGraph
+osgurl="https://github.com/openscenegraph/OpenSceneGraph" # OSG Repository
+version="$(cat VERSION)"
+
+# Adds option to let user download and build the next/testing version of FlightGear
+if [ "$*" = "--next" ]; then
+	fgbranch="next"
+	sgbranch="next"
+	osgbranch="master"
+fi
+
+### CHECKS AND GIT CLONE
+# We will perform a series of checks to see if the repos were cloned
+# already or not, if they were not cloned yet, then git clone will run,
+# Otherwise, the script will try to update, git pull, the repos.
+
+### INTRODUCTION PART
+clear
+echo ""
+echo "#====== Welcome to FlightGear Downloader $version !"
+echo "#====== This script will download OpenSceneGraph, PLIB, SimGear and FlightGear."
+echo ""
+echo "#====== This script will not donwload nor update FlightGear Data. To do that,"
+echo "#====== you can either download the correct version from http://download.flightgear.org/builds/ "
+echo "#====== For example, the file FlightGear-2020.3.4-data.tar.bz2"
+echo ""
+echo "#====== Or you can use git clone -b version git://git.code.sf.net/p/flightgear/fgdata"
+echo "#====== Where version is (next for testing or correct version, like release/2020.3)"
+echo ""
+echo "Move/rename fgdata to ~/FlightGear/data"
+
+# Waits for the user to press a key to continue.
+echo ""
+echo "======= Run this script with the flag --next to build the testing/next version of FlightGear."
+echo "======= Selected FlighthGear version is $fgbranch"
+echo ""
+echo "#====== Press any key to continue or Ctrl + C to cancel."
+read -rsn1
+clear
+
+echo ""
+echo "#====== Downloading Source Codes Started."
+
+# Checking OpenSceneGraph
+echo ""
+echo "#====== Checking if OpenSceneGraph was already downloaded."
+if [ -d "$download_dir/OSG" ]; then
+echo "#======  OpenSceneGraph found, updating the repo if neded."
+cd $download_dir/OSG && git pull # Try to update existing previously cloned repo.
+else
+echo "#====== OpenSceneGraph not found, downloading now."
+git clone --depth=1 -b $osgbranch $osgurl $download_dir/OSG # Clone repo from Git
+fi
+
+# Checking PLIB
+echo ""
+echo "#====== Checking if PLIB was already downloaded."
+if [ -d "$download_dir/PLIB" ]; then
+echo "#======  PLIB found, updating the repo if neded."
+cd $download_dir/PLIB && git pull # Try to update existing previously cloned repo.
+else
+echo "#====== PLIB not found, downloading now."
+git clone --depth=1 https://git.code.sf.net/p/libplib/code $download_dir/PLIB # Clone repo from Git
+fi
+
+# Checking SimGear
+echo ""
+echo "#====== Checking if SimGear was already downloaded."
+if [ -d "$download_dir/SimGear" ]; then
+echo "#======  SimGear found, updating the repo if neded."
+cd $download_dir/SimGear && git pull # Try to update existing previously cloned repo.
+else
+echo "#====== SimGear not found, downloading now."
+git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/simgear $download_dir/SimGear # Clone repo from Git
+fi
+
+# Checking FlightGear
+echo ""
+echo "#====== Checking if FlightGear was already downloaded."
+if [ -d "$download_dir/FlightGear" ]; then
+echo "#======  FlightGear found, updating the repo if neded."
+cd $download_dir/FlightGear && git pull # Try to update existing previously cloned repo.
+else
+echo "#====== FlightGear not found, downloading now."
+git clone --depth=1 -b $fgbranch git://git.code.sf.net/p/flightgear/flightgear $download_dir/FlightGear # Clone repo from Git
+fi
+
+echo ""
+echo "#====== If everything went well then you can compile FlightGear"
+echo "#====== by running the command ./flightgear_compiler"
+echo ""
+echo "#====== Feel free to ask for help and contribute to this script at"
+echo "#====== https://github.com/Megaf/FlightGearBuilder "
+echo ""
