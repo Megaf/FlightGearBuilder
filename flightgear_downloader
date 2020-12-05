@@ -79,7 +79,7 @@ echo ""
 echo "======= Run this script with the flag --next to build the testing/next version of FlightGear."
 echo "======= Selected FlighthGear version is $fgbranch"
 echo ""
-echo "#====== Press any key to continue."
+echo "#====== Press any key to continue or Ctrl + C to cancel."
 read -rsn1
 clear
 

@@ -73,7 +73,7 @@ echo "#====== This script will compile OpenSceneGraph, PLIB, SimGear and FlightG
 
 # Waits for the user to press a key to continue.
 echo ""
-echo "#====== Press any key to continue."
+echo "#====== Press any key to continue or Ctrl + C to cancel."
 read -rsn1
 clear
 

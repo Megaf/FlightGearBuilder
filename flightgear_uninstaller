@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ### ABOUT
-# flightgear_compiler
-# This script will compile from the source code OpenSceneGraph, PLIB, SimGear libraries and FlightGear Flight Simulator.
+# flightgear_uninstaller
+# This script will remove all files created and downloaded by FlightGearBuilder.
 
 ### AUTHOR
 # This software was created by Megaf - https://github.com/Megaf
@@ -42,9 +42,6 @@
 # at all.                                                              #
 #                                                                      #
 ########################################################################
-
-# Uses ccache (https://ccache.dev/) if it's available, to speed rebuilds
-export PATH="/usr/lib/ccache:${PATH}"
 
 # Directory where everything will be installed at.
 installdir="$HOME/FlightGear"
