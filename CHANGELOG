@@ -5,6 +5,7 @@
 # Code tweaks.
 # First stable version.
 # Tells user to press ctrl c to quit the script.
+# Updated README.md to reflect changes done to this version.
 
 # v1.0.2020.12.04
 # build cpu type set to native, O flag to O3
