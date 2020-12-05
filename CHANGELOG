@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# v1.0.2020.12.05
+# Added an uninstaller.
+# Code tweaks.
+# First stable version.
+
 # v1.0.2020.12.04
 # build cpu type set to native, O flag to O3
 # tempdir variable renamed to download_dir
