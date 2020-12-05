@@ -73,7 +73,11 @@ echo "#====== This script will not donwload nor update FlightGear Data. To do th
 echo "#====== you can either download the correct version from http://download.flightgear.org/builds/ "
 echo "#====== For example, the file FlightGear-2020.3.4-data.tar.bz2"
 echo ""
-echo "#====== Or you can use git clone -b version (next for testing or correct version, like release/2020.3) git://git.code.sf.net/p/flightgear/fgdata "
+echo "#====== Or you can use git clone -b version git://git.code.sf.net/p/flightgear/fgdata"
+echo "#====== Where version is (next for testing or correct version, like release/2020.3)"
+echo ""
+echo "Move/rename fgdata to ~/FlightGear/data"
+
 # Waits for the user to press a key to continue.
 echo ""
 echo "======= Run this script with the flag --next to build the testing/next version of FlightGear."
