@@ -80,7 +80,7 @@ clear
 
 # for loop to check if all required sources are present.
 echo "#====== Checking if you have PLIB, OpenSceneGraph, SimGear and FlightGear sources."
-cd "$download_dir" || exit; for f in PLIB OSG SimGear FlightGear; do [[ -e $f ]] || printf '====Error: %s Not found, please run ./flightgear_downloader\n' "$f"; done
+cd "$download_dir" || exit; for f in PLIB OSG SimGear FlightGear; do [ -e "$f" ] || printf '====Error: %s Not found, please run ./flightgear_downloader\n' "$f"; done
 
 # Now the script will run cmake and make and make install for each component.
 echo ""
