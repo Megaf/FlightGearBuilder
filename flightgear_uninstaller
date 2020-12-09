@@ -64,10 +64,10 @@ clear
 # Removing files.
 echo "#====== Removing previously downloaded files."
 echo "Removing $download_dir"
-rm -rf "${download_dir:?}"
+rm -rf -- "${download_dir:?}"
 echo "#====== Removing Compiling left overs."
 echo "Removing $buildir"
-rm -rf "${buildir:?}"
+rm -rf -- "${buildir:?}"
 echo "#====== Uninstalling FlightGear."
-echo "Removing $installdir
-rm -rf "${installdir:?}"
+echo "Removing $installdir"
+rm -rf -- "${installdir:?}"
