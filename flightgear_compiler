@@ -58,7 +58,7 @@ version="$(cat VERSION)"
 cflags="-march=native -mtune=native -O3 -pipe -mfpmath=both"
 buildtype="Release" # Build type, Release for better performance. All flags in this script are for Release type.
 
-rm -rf "${$installdir:?}/bin" "${$installdir:?}/lib" "${$installdir:?}/include" # Delete old installed binaries and libs.
+rm -rf "${installdir:?}"/bin "${installdir:?}"/lib "${installdir:?}"/include # Delete old installed binaries and libs.
 # Creating directories where cmake will run from.
 cd "$buildir"
 mkdir -p OSG PLIB SimGear FlightGear
