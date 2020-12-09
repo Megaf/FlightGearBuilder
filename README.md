@@ -26,9 +26,9 @@ By default the script will install to **~/FlightGear**.
 ## How to I run FlightGear?
 If everything wel well, you can run `./flightgear --launcher` from **`~/FlightGear`**.
 
-### Configuration
+## Configuration
 
-## Install Location
+### Install Location
 You can change where you want to install FlightGear to by editing the file `INSTALL_LOCATION`.
 
 If you'd like to install it to `/usr/local/FlightGear`, then simply put that in `INTALL_LOCATION`.
