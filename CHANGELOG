@@ -1,5 +1,13 @@
 # CHANGELOG
 
+# v1.1.2020.12.09.13.17
+# Fixed many variable attributions.
+# Walking towards POSIX compliance.
+# Fixed many typos.
+# Added a nice fgdata downloader, with options to download stable and testing versions of it.
+# More code tweaks.
+# Version bump!
+
 # v1.0.2020.12.05
 # Added an uninstaller.
 # Code tweaks.

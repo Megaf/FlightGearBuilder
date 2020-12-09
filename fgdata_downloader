@@ -1,8 +1,10 @@
 #!/bin/bash
 
 ### ABOUT
-# flightgear_uninstaller
-# This script will remove all files created and downloaded by FlightGearBuilder.
+# fgdata_downloader
+# This script will download FlightGear data.
+# These are files and folders that contains 3D models, textures and
+# other files required to run FlightGear. It will take a couple of GBs.
 
 ### AUTHOR
 # This software was created by Megaf - https://github.com/Megaf
@@ -43,17 +45,26 @@
 #                                                                      #
 ########################################################################
 
-installdir="$(envsubst < INSTALL_LOCATION)" # Directory where everything will be installed to
-download_dir="/tmp/FlightGear_Sources" # Directory where the source codes will be downloaded to.
-buildir="/dev/shm/FlightGear_Compiler_Output" # Temporary directory where cmake will run from.
-read -r version < VERSION # Using read command to get version information from the file VERSION
+installdir="$(envsubst < INSTALL_LOCATION)" # Directory where FlightGear data will be downloaded to.
+read -r version < VERSION # Using read command to get version information from the file VERSION.
+
+major_stable_version="2020.3"
+minor_stable_version=".4"
+git_stable_version=release/"$major_stable_version"
+
+major_testing_version="nightly"
+minor_testing_version="latest"
+git_testing_version="next"
 
 ### INTRODUCTION PART
 clear
-echo ""
 echo "#====== Welcome to FlightGearBuilder $version !"
-echo "#====== This script will remove all downloaded files, compiler left overs and"
-echo "#====== uninstall FlightGear that was previously installed using FlightGearBuilder"
+echo "#====== This script will download FlightGear data files."
+echo ""
+echo "#====== You must use flags '--stable'/'--next' and '--git'/'--wget' to tell this script"
+echo "#====== which version of FlightGear Data you want to donwload and if you want to use"
+echo "#====== git or wget to download it."
+echo ""
 
 # Waits for the user to press a key to continue.
 echo ""
@@ -61,13 +72,41 @@ echo "#====== Press any key to continue or Ctrl + C to cancel."
 read -rsn1
 clear
 
-# Removing files.
-echo "#====== Removing previously downloaded files."
-echo "Removing $download_dir"
-rm -rf -- "${download_dir:?}"
-echo "#====== Removing Compiling left overs."
-echo "Removing $buildir"
-rm -rf -- "${buildir:?}"
-echo "#====== Uninstalling FlightGear."
-echo "Removing $installdir"
-rm -rf -- "${installdir:?}"
+echo "#====== Deleting old data files."
+rm -rf -- "${installdir:?}"/data
+mkdir -p "${installdir:?}" || exit
+cd "$installdir" || exit
+
+download_fgdata_stable_git(){
+    git clone -b "$git_stable_version" --depth=1 git://git.code.sf.net/p/flightgear/fgdata data
+}
+
+download_fgdata_stable_wget(){
+    wget -c http://download.flightgear.org/builds/"$major_stable_version"/FlightGear-"$major_stable_version""$minor_stable_version"-data.tar.bz2 -O fgdata.tar.bz2
+    tar jxfv ./FlightGear-"$major_stable_version""$minor_stable_version"-data.tar.bz2 && rm -f -- ./fgdata.tar.bz2
+}
+
+download_fgdata_next_git(){
+    git clone -b "$git_testing_version" --depth=1 git://git.code.sf.net/p/flightgear/fgdata data
+}
+
+download_fgdata_next_wget(){
+    wget -c http://download.flightgear.org/builds/"$major_testing_version"/FlightGear-"$minor_testing_version"-data.tar.bz2 -O fgdata.tar.bz2
+    tar jxfv ./FlightGear-"$minor_testing_version"-data.tar.bz2 && rm -f -- ./fgdata.tar.bz2
+}
+
+if [[ "$*" = *"--stable"* ]] && [[ "$*" = *"--wget"* ]]; then
+    echo "selected $*" && download_fgdata_stable_wget
+fi
+
+if [[ "$*" = *"--stable"* ]] && [[ "$*" = *"--git"* ]]; then
+    echo "selected $*" && download_fgdata_stable_git
+fi
+
+if [[ "$*" = *"--next"* ]] && [[ "$*" = *"--wget"* ]]; then
+    echo "selected $*" && download_fgdata_next_wget
+fi
+
+if [[ "$*" = *"--next"* ]] && [[ "$*" = *"--git"* ]]; then
+    echo "selected $*" && download_fgdata_next_git
+fi
