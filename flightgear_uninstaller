@@ -43,7 +43,7 @@
 #                                                                      #
 ########################################################################
 
-installdir="$(envsubst < INSTALL_LOCATION)"# Directory where everything will be installed to
+installdir="$(envsubst < INSTALL_LOCATION)" # Directory where everything will be installed to
 download_dir="/tmp/FlightGear_Sources" # Directory where the source codes will be downloaded to.
 buildir="/dev/shm/FlightGear_Compiler_Output" # Temporary directory where cmake will run from.
 read -r version < VERSION # Using read command to get version information from the file VERSION
@@ -63,8 +63,11 @@ clear
 
 # Removing files.
 echo "#====== Removing previously downloaded files."
+echo "Removing $download_dir"
 rm -rf "${download_dir:?}"
 echo "#====== Removing Compiling left overs."
+echo "Removing $buildir"
 rm -rf "${buildir:?}"
 echo "#====== Uninstalling FlightGear."
+echo "Removing $installdir
 rm -rf "${installdir:?}"
