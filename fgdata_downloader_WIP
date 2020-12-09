@@ -48,18 +48,56 @@
 echo "THIS IS WORK IN PROGRESS, A PLACEHOLDER, DON'T USE THIS."
 exit
 
-installdir="$(cat INSTALL_LOCATION)/data" # Directory where FlightGear data will be downloaded to.
-stable_version="release/2020.3" # Current stable version.
-version="$(cat VERSION)" # FlightGearBuilder version.
+datainstalldir="$(envsubst < INSTALL_LOCATION)"/data # Directory where FlightGear data will be downloaded to.
+read -r version < VERSION # Using read command to get version information from the file VERSION.
+
+major_stable_version="2020.3"
+minor_stable_version=".4"
+git_stable_version=release/"$major_stable_version"
+
+major_testing_version="nightly"
+minor_testing_version="latest"
+git_testing_version="next"
+
+### INTRODUCTION PART
+clear
+echo ""
+echo "#====== Welcome to FlightGearBuilder $version !"
+echo "#====== This script will compile OpenSceneGraph, PLIB, SimGear and FlightGear."
+
+mkdir -p "$datainstalldir" || exit
+cd "$datainstalldir" || exit
+
+if [[ "$*" = *"--stable"* ]] && [[ "$*" = *"--git"* ]]; then
+    download_fgdata_stable_git
+fi
+
+if [[ "$*" = *"--stable"* ]] && [[ "$*" = *"--wget"* ]]; then
+    download_fgdata_stable_wget
+fi
+
+if [[ "$*" = *"--next"* ]] && [[ "$*" = *"--wget"* ]]; then
+    download_fgdata_next_wget
+fi
+
+if [[ "$*" = *"--next"* ]] && [[ "$*" = *"--git"* ]]; then
+    download_fgdata_next_git
+fi
 
 download_fgdata_stable_git(){
+    git clone -b "$git_stable_version" --depth=1 git://git.code.sf.net/p/flightgear/fgdata .
 }
 
 download_fgdata_stable_wget(){
+    wget -c http://download.flightgear.org/builds/"$major_stable_version"/FlightGear-"$major_stable_version""$minor_stable_version"-data.tar.bz2
+    tar jxfv ./FlightGear-"$major_stable_version""$minor_stable_version"-data.tar.bz2 && rm -f ./*.tar.bz2
 }
 
 download_fgdata_next_git(){
+    git clone -b "$git_testing_version" --depth=1 git://git.code.sf.net/p/flightgear/fgdata .
 }
 
-download_fgdata_next_wget(){
+download_fgdata_stable_wget(){
+    wget -c http://download.flightgear.org/builds/"$major_testing_version"/FlightGear-"$minor_testing_version"-data.tar.bz2
+    tar jxfv ./FlightGear-"$minor_testing_version"-data.tar.bz2 && rm -f ./*.tar.bz2
 }
