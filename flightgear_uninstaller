@@ -44,7 +44,7 @@
 ########################################################################
 
 # Directory where everything will be installed at.
-installdir="$HOME/FlightGear"
+installdir="$(cat INSTALL_LOCATION)"
 # Directory where the source codes will be downloaded to.
 download_dir="/tmp/FlightGear_Sources"
 # Temporary directory where cmake will run from.
