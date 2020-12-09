@@ -135,10 +135,10 @@ chmod +x $installdir/flightgear # Sets it as executable
 
 echo ""
 echo "#====== Done. Enter $installdir and run $installdir/flightgear to start the sim."
-echo "#====== The command flightgear will take the same arguments as fgfs, such as flightgear --launcher"
+echo "#====== The command flightgear will take the same arguments as fgfs, such as \`flightgear --launcher\`"
 echo ""
 echo "#====== If everything went well then you can run FlightGear"
-echo "#====== by running the command ./flightgear or ./flightgear --launcher."
+echo "#====== by running the command \`./flightgear\` or \`./flightgear --launcher\`."
 echo ""
 echo "#====== Feel free to ask for help and contribute to this script at"
 echo "#====== https://github.com/Megaf/FlightGearBuilder "
