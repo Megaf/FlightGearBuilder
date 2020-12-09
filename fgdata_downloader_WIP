@@ -48,7 +48,7 @@
 echo "THIS IS WORK IN PROGRESS, A PLACEHOLDER, DON'T USE THIS."
 exit
 
-fgdata_dir="$HOME/FlightGear/data" # Directory where FlightGear data will be downloaded to.
+installdir="$(cat INSTALL_LOCATION)/data" # Directory where FlightGear data will be downloaded to.
 stable_version="release/2020.3" # Current stable version.
 version="$(cat VERSION)" # FlightGearBuilder version.
 
