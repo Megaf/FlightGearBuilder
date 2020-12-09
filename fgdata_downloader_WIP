@@ -45,10 +45,7 @@
 #                                                                      #
 ########################################################################
 
-echo "⚠️ THIS IS WORK IN PROGRESS, A PLACEHOLDER, DON'T USE THIS. ⚠️"
-exit
-
-datainstalldir="$(envsubst < INSTALL_LOCATION)"/data # Directory where FlightGear data will be downloaded to.
+installdir="$(envsubst < INSTALL_LOCATION)" # Directory where FlightGear data will be downloaded to.
 read -r version < VERSION # Using read command to get version information from the file VERSION.
 
 major_stable_version="2020.3"
@@ -61,46 +58,53 @@ git_testing_version="next"
 
 ### INTRODUCTION PART
 clear
+echo "⚠️ THIS IS WORK IN PROGRESS, A PLACEHOLDER, DON'T USE THIS. ⚠️"
 echo ""
 echo "#====== Welcome to FlightGearBuilder $version !"
 echo "#====== This script will compile OpenSceneGraph, PLIB, SimGear and FlightGear."
+echo ""
+echo "#====== You must use flags '--stable'/'--next' and '--git'/'--wget' to tell this script"
+echo "#====== which version of FlightGear Data you want to donwload and if you want to use"
+echo "#====== git or wget to download it."
+echo ""
 
-mkdir -p "$datainstalldir" || exit
-cd "$datainstalldir" || exit
-
-if [[ "$*" = *"--stable"* ]]; then
-    if [[ "$*" = *"--git"* ]];then
-        thendownload_fgdata_stable_git
-    fi
-fi
-
-if [[ "$*" = *"--stable"* ]] && [[ "$*" = *"--wget"* ]]; then
-    download_fgdata_stable_wget
-fi
-
-if [[ "$*" = *"--next"* ]] && [[ "$*" = *"--wget"* ]]; then
-    download_fgdata_next_wget
-fi
-
-if [[ "$*" = *"--next"* ]] && [[ "$*" = *"--git"* ]]; then
-    download_fgdata_next_git
-fi
+rm -rf -- "${installdir:?}"/data
+cd "$installdir" || exit
 
 download_fgdata_stable_git(){
-    git clone -b "$git_stable_version" --depth=1 git://git.code.sf.net/p/flightgear/fgdata .
+    echo "#====== Downloading from $git_stable_version from git://git.code.sf.net/p/flightgear/fgdata"
+    git clone -b "$git_stable_version" --depth=1 git://git.code.sf.net/p/flightgear/fgdata data
 }
 
 download_fgdata_stable_wget(){
-    wget -c http://download.flightgear.org/builds/"$major_stable_version"/FlightGear-"$major_stable_version""$minor_stable_version"-data.tar.bz2
-    tar jxfv ./FlightGear-"$major_stable_version""$minor_stable_version"-data.tar.bz2 && rm -f ./*.tar.bz2
+    echo "#====== Downloading $major_stable_version $minor_stable_version from http://download.flightgear.org/builds/"
+    wget -c http://download.flightgear.org/builds/"$major_stable_version"/FlightGear-"$major_stable_version""$minor_stable_version"-data.tar.bz2 -O fgdata.tar.bz2
+    tar jxfv ./FlightGear-"$major_stable_version""$minor_stable_version"-data.tar.bz2 && rm -f -- ./fgdata.tar.bz2
 }
 
 download_fgdata_next_git(){
-    git clone -b "$git_testing_version" --depth=1 git://git.code.sf.net/p/flightgear/fgdata .
+    echo "#====== Downloading $git_testing_version from git://git.code.sf.net/p/flightgear/fgdata"
+    git clone -b "$git_testing_version" --depth=1 git://git.code.sf.net/p/flightgear/fgdata data
 }
 
-download_fgdata_stable_wget(){
-    wget -c http://download.flightgear.org/builds/"$major_testing_version"/FlightGear-"$minor_testing_version"-data.tar.bz2
-    tar jxfv ./FlightGear-"$minor_testing_version"-data.tar.bz2 && rm -f ./*.tar.bz2
+download_fgdata_next_wget(){
+    echo "#====== Downloading $major_testing_version $minor_testing_version from http://download.flightgear.org/builds/"
+    wget -c http://download.flightgear.org/builds/"$major_testing_version"/FlightGear-"$minor_testing_version"-data.tar.bz2 -O fgdata.tar.bz2
+    tar jxfv ./FlightGear-"$minor_testing_version"-data.tar.bz2 && rm -f -- ./fgdata.tar.bz2
 }
 
+if [[ "$*" = *"--stable"* ]] && [[ "$*" = *"--wget"* ]]; then
+    echo "selected $*" && download_fgdata_stable_wget
+fi
+
+if [[ "$*" = *"--stable"* ]] && [[ "$*" = *"--git"* ]]; then
+    echo "selected $*" && download_fgdata_stable_git
+fi
+
+if [[ "$*" = *"--next"* ]] && [[ "$*" = *"--wget"* ]]; then
+    echo "selected $*" && download_fgdata_next_wget
+fi
+
+if [[ "$*" = *"--next"* ]] && [[ "$*" = *"--git"* ]]; then
+    echo "selected $*" && download_fgdata_next_git
+fi
