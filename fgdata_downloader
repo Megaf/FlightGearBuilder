@@ -83,7 +83,7 @@ download_fgdata_stable_git(){
 
 download_fgdata_stable_wget(){
     wget -c http://download.flightgear.org/builds/"$major_stable_version"/FlightGear-"$major_stable_version""$minor_stable_version"-data.tar.bz2 -O fgdata.tar.bz2
-    tar jxfv ./FlightGear-"$major_stable_version""$minor_stable_version"-data.tar.bz2 && rm -f -- ./fgdata.tar.bz2
+    tar jxfv fgdata.tar.bz2 && rm -f -- ./fgdata.tar.bz2 && mv fgdata data
 }
 
 download_fgdata_next_git(){
@@ -92,7 +92,7 @@ download_fgdata_next_git(){
 
 download_fgdata_next_wget(){
     wget -c http://download.flightgear.org/builds/"$major_testing_version"/FlightGear-"$minor_testing_version"-data.tar.bz2 -O fgdata.tar.bz2
-    tar jxfv ./FlightGear-"$minor_testing_version"-data.tar.bz2 && rm -f -- ./fgdata.tar.bz2
+    tar jxfv fgdata.tar.bz2 && rm -f -- ./fgdata.tar.bz2 && mv fgdata data
 }
 
 if [[ "$*" = *"--stable"* ]] && [[ "$*" = *"--wget"* ]]; then
