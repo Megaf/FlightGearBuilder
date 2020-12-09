@@ -59,7 +59,7 @@ echo "#====== Removing previously installed binaries and libs."
 rm -rf "${installdir:?}"/bin "${installdir:?}"/lib "${installdir:?}"/include # Delete old installed binaries and libs.
 
 # Creating directories where cmake will run from.
-cd "$buildir"
+mkdir -p "$buildir" && cd "$buildir"
 mkdir -p OSG PLIB SimGear FlightGear
 
 # Variables defining which branches will be used for each repository.
