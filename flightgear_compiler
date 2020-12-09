@@ -121,7 +121,7 @@ echo "#====== Creating fgfs runner script."
 
 # Creates $installdir/flightgear
 # To learn more about fg home and root read http://wiki.flightgear.org/$FG_HOME and http://wiki.flightgear.org/$FG_ROOT
- 
+
 # Creates $installdir/flightgear
 cat << EOF > "$installdir"/flightgear
 #!/bin/bash
@@ -135,7 +135,7 @@ chmod +x $installdir/flightgear # Sets it as executable
 
 echo ""
 echo "#====== Done. Enter $installdir and run $installdir/flightgear to start the sim."
-echo "#====== The command flightgear will take the same arguments as fgfs, such as flightgear --launcher" 
+echo "#====== The command flightgear will take the same arguments as fgfs, such as flightgear --launcher"
 echo ""
 echo "#====== If everything went well then you can run FlightGear"
 echo "#====== by running the command ./flightgear or ./flightgear --launcher."

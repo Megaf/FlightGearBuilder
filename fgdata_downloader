@@ -74,6 +74,7 @@ clear
 
 echo "#====== Deleting old data files."
 rm -rf -- "${installdir:?}"/data
+mkdir -p "${installdir:?}" || exit
 cd "$installdir" || exit
 
 download_fgdata_stable_git(){
