@@ -47,7 +47,7 @@
 export PATH="/usr/lib/ccache:${PATH}"
 
 # Directory where everything will be installed at.
-installdir="$(cat INSTALL_LOCATION)"
+installdir="$(envsubst < INSTALL_LOCATION)"
 # Directory where the source codes will be downloaded to.
 download_dir="/tmp/FlightGear_Sources"
 # Temporary directory where cmake will run from.
@@ -58,9 +58,10 @@ version="$(cat VERSION)"
 cflags="-march=native -mtune=native -O3 -pipe -mfpmath=both"
 buildtype="Release" # Build type, Release for better performance. All flags in this script are for Release type.
 
-rm -rf $installdir/bin $installdir/lib $installdir/include # Delete old installed binaries and libs.
+rm -rf "${$installdir:?}/bin" "${$installdir:?}/lib" "${$installdir:?}/include" # Delete old installed binaries and libs.
 # Creating directories where cmake will run from.
-mkdir -p $buildir/OSG $buildir/PLIB $buildir/SimGear $buildir/FlightGear
+cd "$buildir"
+mkdir -p OSG PLIB SimGear FlightGear
 
 # Variables defining which branches will be used for each repository.
 ncores="$(nproc)" # Sets the number of compiler tasks according to number of logical cpus in your system
@@ -123,7 +124,7 @@ echo "#====== Creating fgfs runner script."
 # To learn more about fg home and root read http://wiki.flightgear.org/$FG_HOME and http://wiki.flightgear.org/$FG_ROOT
  
 # Creates $installdir/flightgear
-cat << EOF > $installdir/flightgear
+cat << EOF > "$installdir"/flightgear
 #!/bin/bash
 export LD_LIBRARY_PATH=$installdir/lib
 export FG_HOME=$installdir/FG_HOME
