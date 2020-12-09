@@ -49,7 +49,7 @@ fgbranch="release/2020.3" # Branch for FlightHear
 sgbranch="release/2020.3" # Branch for SimGear
 osgbranch="OpenSceneGraph-3.6" # Branch for OpenSceneGraph
 osgurl="https://github.com/openscenegraph/OpenSceneGraph" # OSG Repository
-version="$(cat VERSION)"
+read -r version < VERSION # Using read command to get version information from the file VERSION
 
 # Adds option to let user download and build the next/testing version of FlightGear
 if [ "$*" = "--next" ]; then
@@ -93,7 +93,7 @@ echo "#====== Downloading Source Codes Started."
 # Checking OpenSceneGraph
 echo ""
 echo "#====== Checking if OpenSceneGraph was already downloaded."
-if [ -d "$download_dir/OSG" ]; then
+if [ -d "$download_dir"/OSG ]; then
 echo "#======  OpenSceneGraph found, updating the repo if neded."
 cd $download_dir/OSG && git pull # Try to update existing previously cloned repo.
 else
@@ -104,7 +104,7 @@ fi
 # Checking PLIB
 echo ""
 echo "#====== Checking if PLIB was already downloaded."
-if [ -d "$download_dir/PLIB" ]; then
+if [ -d "$download_dir"/PLIB ]; then
 echo "#======  PLIB found, updating the repo if neded."
 cd $download_dir/PLIB && git pull # Try to update existing previously cloned repo.
 else
@@ -115,7 +115,7 @@ fi
 # Checking SimGear
 echo ""
 echo "#====== Checking if SimGear was already downloaded."
-if [ -d "$download_dir/SimGear" ]; then
+if [ -d "$download_dir"/SimGear ]; then
 echo "#======  SimGear found, updating the repo if neded."
 cd $download_dir/SimGear && git pull # Try to update existing previously cloned repo.
 else
@@ -126,7 +126,7 @@ fi
 # Checking FlightGear
 echo ""
 echo "#====== Checking if FlightGear was already downloaded."
-if [ -d "$download_dir/FlightGear" ]; then
+if [ -d "$download_dir"/FlightGear ]; then
 echo "#======  FlightGear found, updating the repo if neded."
 cd $download_dir/FlightGear && git pull # Try to update existing previously cloned repo.
 else
