@@ -45,7 +45,7 @@
 #                                                                      #
 ########################################################################
 
-echo "THIS IS WORK IN PROGRESS, A PLACEHOLDER, DON'T USE THIS."
+echo "⚠️ THIS IS WORK IN PROGRESS, A PLACEHOLDER, DON'T USE THIS. ⚠️"
 exit
 
 datainstalldir="$(envsubst < INSTALL_LOCATION)"/data # Directory where FlightGear data will be downloaded to.
@@ -68,8 +68,10 @@ echo "#====== This script will compile OpenSceneGraph, PLIB, SimGear and FlightG
 mkdir -p "$datainstalldir" || exit
 cd "$datainstalldir" || exit
 
-if [[ "$*" = *"--stable"* ]] && [[ "$*" = *"--git"* ]]; then
-    download_fgdata_stable_git
+if [[ "$*" = *"--stable"* ]]; then
+    if [[ "$*" = *"--git"* ]];then
+        thendownload_fgdata_stable_git
+    fi
 fi
 
 if [[ "$*" = *"--stable"* ]] && [[ "$*" = *"--wget"* ]]; then
@@ -101,3 +103,4 @@ download_fgdata_stable_wget(){
     wget -c http://download.flightgear.org/builds/"$major_testing_version"/FlightGear-"$minor_testing_version"-data.tar.bz2
     tar jxfv ./FlightGear-"$minor_testing_version"-data.tar.bz2 && rm -f ./*.tar.bz2
 }
+
