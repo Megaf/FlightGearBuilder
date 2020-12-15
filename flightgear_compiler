@@ -129,7 +129,6 @@ export FG_PROG="$installdir"
 export LD_LIBRARY_PATH="$installdir/lib"
 export FG_HOME="$installdir/FG_HOME"
 export FG_ROOT="$installdir/data"
-export FG_SCENERY="$installdir/Scenery"
 $installdir/bin/fgfs \$*
 EOF
 
