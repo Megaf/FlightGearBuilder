@@ -47,7 +47,7 @@
 download_dir="/tmp/FlightGear_Sources" # Directory where the source codes will be downloaded to.
 fgbranch="release/2020.3" # Branch for FlightHear
 sgbranch="release/2020.3" # Branch for SimGear
-osgbranch="OpenSceneGraph-3.6" # Branch for OpenSceneGraph
+osgbranch="OpenSceneGraph-3.6.5" # Branch for OpenSceneGraph
 osgurl="https://github.com/openscenegraph/OpenSceneGraph" # OSG Repository
 read -r version < VERSION # Using read command to get version information from the file VERSION
 
@@ -93,7 +93,7 @@ echo "#======  OpenSceneGraph found, updating the repo if neded."
 cd $download_dir/OSG && git pull # Try to update existing previously cloned repo.
 else
 echo "#====== OpenSceneGraph not found, downloading now."
-git clone --depth=1 -b $osgbranch $osgurl $download_dir/OSG # Clone repo from Git
+git clone --depth=1 -b "$osgbranch" "$osgurl" "$download_dir"/OSG # Clone repo from Git
 fi
 
 # Checking PLIB
