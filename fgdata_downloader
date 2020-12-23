@@ -50,7 +50,7 @@ read -r version < VERSION # Using read command to get version information from t
 
 major_stable_version="2020.3"
 minor_stable_version=".5"
-git_stable_version=version/"$major_stable_version"
+git_stable_version=release/"$major_stable_version"
 
 major_testing_version="nightly"
 minor_testing_version="latest"
