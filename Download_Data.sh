@@ -73,7 +73,7 @@ clear
 echo "#====== Welcome to FlightGearBuilder $version !"
 echo "#====== This script will download FlightGear data files."
 echo ""
-echo "#====== Use --next to donwload the development version of FGData."
+echo "#====== Use --next to download the development version of FGData."
 echo ""
 
 # Waits for the user to press a key to continue.
