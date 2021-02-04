@@ -88,7 +88,7 @@ echo "#====== Welcome to FlightGear Downloader $version !"
 echo "#====== This script will download OpenSceneGraph, PLIB, SimGear and FlightGear."
 echo ""
 echo "#====== This script will not download nor update FlightGear Data. To do that,"
-echo "#====== you can run the script \`./FlightGear_Data_Downloader.sh\` in a different terminal window."
+echo "#====== you can run the script \`./Download_Data.sh\` in a different terminal window."
 echo "#====== While you run \`FlightGear_Downloader.sh\` and \`FlightGear_Compiler.sh\`"
 
 # Waits for the user to press a key to continue.
