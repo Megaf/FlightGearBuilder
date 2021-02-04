@@ -1,10 +1,9 @@
 #!/bin/bash
 
 ### ABOUT
-# fgdata_downloader
-# This script will download FlightGear data.
-# These are files and folders that contains 3D models, textures and
-# other files required to run FlightGear. It will take a couple of GBs.
+# FlightGear_Data_Downloader.sh
+# This script will download, from Git repositories, the data files
+# required to run the FlightGear Flight Simulator.
 
 ### AUTHOR
 # This software was created by Megaf - https://github.com/Megaf
@@ -45,25 +44,36 @@
 #                                                                      #
 ########################################################################
 
-installdir="$(envsubst < INSTALL_LOCATION)" # Directory where FlightGear data will be downloaded to.
-read -r version < VERSION # Using read command to get version information from the file VERSION.
+# Using read command to get version information from the file VERSION
+read -r version < VERSION
 
-major_stable_version="2020.3"
-minor_stable_version=".5"
-git_stable_version="version/""$major_stable_version""$minor_stable_version"
+# Directory where the source files will be downloaded to.
+install_directory="$HOME/FlightGear-Stable"
 
-major_testing_version="nightly"
-minor_testing_version="latest"
-git_testing_version="next"
+# Git Repository to download the source files from.
+fgdata_repository="git://git.code.sf.net/p/flightgear/fgdata"
+
+# Branches/Versions of each component.
+#fgdata_branch="version/2020.3.6"
+fgdata_branch="2020.3"
+
+# By default, without command line arguments the script will download the stable
+# version of FlightGear, the following "if" statement downloads the "next"
+# development version of FlightGear.
+#
+# It will also install FlightGear to folder name FlightGear-Next instead of 
+# FlightGear-Stable
+if [ "$*" = "--next" ]; then
+    install_directory="$HOME/FlightGear-Next"
+    fgdata_branch="next"
+fi
 
 ### INTRODUCTION PART
 clear
 echo "#====== Welcome to FlightGearBuilder $version !"
 echo "#====== This script will download FlightGear data files."
 echo ""
-echo "#====== You must use flags '--stable'/'--next' and '--git'/'--wget' to tell this script"
-echo "#====== which version of FlightGear Data you want to donwload and if you want to use"
-echo "#====== git or wget to download it."
+echo "#====== Use --next to donwload the development version of FGData."
 echo ""
 
 # Waits for the user to press a key to continue.
@@ -72,41 +82,13 @@ echo "#====== Press any key to continue or Ctrl + C to cancel."
 read -rsn1
 clear
 
-echo "#====== Deleting old data files."
-rm -rf -- "${installdir:?}"/data
-mkdir -p "${installdir:?}" || exit
-cd "$installdir" || exit
-
-download_fgdata_stable_git(){
-    git clone -b "$git_stable_version" --depth=1 git://git.code.sf.net/p/flightgear/fgdata data
-}
-
-download_fgdata_stable_wget(){
-    wget -c http://download.flightgear.org/builds/"$major_stable_version"/FlightGear-"$major_stable_version""$minor_stable_version"-data.tar.bz2 -O fgdata.tar.bz2
-    tar jxfv fgdata.tar.bz2 && rm -f -- ./fgdata.tar.bz2 && mv fgdata data
-}
-
-download_fgdata_next_git(){
-    git clone -b "$git_testing_version" --depth=1 git://git.code.sf.net/p/flightgear/fgdata data
-}
-
-download_fgdata_next_wget(){
-    wget -c http://download.flightgear.org/builds/"$major_testing_version"/FlightGear-"$minor_testing_version"-data.tar.bz2 -O fgdata.tar.bz2
-    tar jxfv fgdata.tar.bz2 && rm -f -- ./fgdata.tar.bz2 && mv fgdata data
-}
-
-if [[ "$*" = *"--stable"* ]] && [[ "$*" = *"--wget"* ]]; then
-    echo "selected $*" && download_fgdata_stable_wget
-fi
-
-if [[ "$*" = *"--stable"* ]] && [[ "$*" = *"--git"* ]]; then
-    echo "selected $*" && download_fgdata_stable_git
-fi
-
-if [[ "$*" = *"--next"* ]] && [[ "$*" = *"--wget"* ]]; then
-    echo "selected $*" && download_fgdata_next_wget
-fi
-
-if [[ "$*" = *"--next"* ]] && [[ "$*" = *"--git"* ]]; then
-    echo "selected $*" && download_fgdata_next_git
+# Checking FlightGear Data.
+echo ""
+echo "#====== Checking if FlightGear Data was already downloaded."
+if [ -d "$install_directory"/data ]; then
+    echo "#======  FlightGear Data found, updating the repo if neded."
+    cd "$install_directory"/data && git pull # Try to update existing previously cloned repo.
+        else
+            echo "#====== FlightGear Data not found, downloading now."
+            git clone -b "$fgdata_branch" "$fgdata_repository" "$install_directory"/data # Clone repo from Git
 fi
