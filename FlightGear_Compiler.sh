@@ -1,8 +1,9 @@
 #!/bin/bash
 
 ### ABOUT
-# flightgear_compiler
-# This script will compile from the source code OpenSceneGraph, PLIB, SimGear libraries and FlightGear Flight Simulator.
+# FlightGear_Compiler.sh
+# This script will compile from the source code OpenSceneGraph,
+# PLIB, SimGear and FlightGear.
 
 ### AUTHOR
 # This software was created by Megaf - https://github.com/Megaf
@@ -43,27 +44,38 @@
 #                                                                      #
 ########################################################################
 
+# Using read command to get version information from the file VERSION
+read -r version < VERSION
+
+# Direcotry where the source files will be downloaded to.
+download_directory="$HOME"/FlightGear-Stable_Source_Files
+install_directory="$HOME"/FlightGear-Stable
+compiler_out_directory="/dev/shm/FlightGear-Stable"
+
+# By default, without command line arguments the script will download the stable
+# version of FlightGear, the following "if" statement downloads the "next"
+# development version of FlightGear.
+#
+# It will also install FlightGear to folder name FlightGear-Next instead of 
+# FlightGear-Stable
+if [ "$*" = "--next" ]; then
+    download_directory="$HOME"/FlightGear-Next_Source_Files
+    install_directory="$HOME"/FlightGear-Next
+    compiler_out_directory="/dev/shm/FlightGear-Next"
+fi
+
 # Uses ccache (https://ccache.dev/) if it's available, to speed rebuilds
 export PATH="/usr/lib/ccache:${PATH}"
 
-installdir="$(envsubst < INSTALL_LOCATION)" # Directory where everything will be installed to
-download_dir="/tmp/FlightGear_Sources" # Directory where the source codes will be downloaded to.
-buildir="/dev/shm/FlightGear_Compiler_Output" # Temporary directory where cmake will run from.
-read -r version < VERSION # Using read command to get version information from the file VERSION
-
 # Compiler flags
-cflags="-march=native -mtune=native -O3 -pipe -mfpmath=both"
+cflags="-march=x86-64 -mtune=generic -Os -pipe -mfpmath=both"
 buildtype="Release" # Build type, Release for better performance. All flags in this script are for Release type.
-
-echo "#====== Removing previously installed binaries and libs."
-rm -rf "${installdir:?}"/bin "${installdir:?}"/lib "${installdir:?}"/include # Delete old installed binaries and libs.
-
-# Creating directories where cmake will run from.
-mkdir -p "$buildir" && cd "$buildir"
-mkdir -p OSG PLIB SimGear FlightGear
 
 # Variables defining which branches will be used for each repository.
 ncores="$(nproc)" # Sets the number of compiler tasks according to number of logical cpus in your system
+
+# Creating directories where cmake will run from.
+mkdir -p "$compiler_out_directory"/OSG "$compiler_out_directory"/PLIB "$compiler_out_directory"/SimGear "$compiler_out_directory"/FlightGear
 
 ### INTRODUCTION PART
 clear
@@ -77,40 +89,30 @@ echo "#====== Press any key to continue or Ctrl + C to cancel."
 read -rsn1
 clear
 
-# for loop to check if all required sources are present.
-echo "#====== Checking if you have PLIB, OpenSceneGraph, SimGear and FlightGear sources."
-cd "$download_dir" || exit; for f in PLIB OSG SimGear FlightGear; do [ -e "$f" ] || printf '====Error: %s Not found, please run ./flightgear_downloader\n' "$f"; done
-
-# Now the script will run cmake and make and make install for each component.
+# Checking deps with cmake and compiling each component with make.
+# Compiling OSG
 echo ""
 echo "#====== Compiling OpenSceneGraph."
-cd $buildir/OSG && cmake $download_dir/OSG -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
-make -j $ncores && echo "#====== Installing OpenSceneGraph." && make install && rm -rf $buildir/OSG
+cd "$compiler_out_directory"/OSG && cmake "$download_directory"/OSG -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX="$install_directory"
+make -j "$ncores" && make -j "$ncores" install
 
-echo ""
-echo "#====== If something went wrong when compiling OpenSceneGraph then make sure"
-echo "#====== you have all dependencies required."
-
+# Compiling PLIB
 echo ""
 echo "#====== Compiling PLIB."
-cd $buildir/PLIB && cmake $download_dir/PLIB -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
-make -j $ncores && echo "#====== Installing PLIB." && make install&& rm -rf $buildir/PLIB
+cd "$compiler_out_directory"/PLIB && cmake "$download_directory"/PLIB -DCMAKE_BUILD_TYPE="$buildtype" -DOpenGL_GL_PREFERENCE=LEGACY -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX="$install_directory"
+make -j "$ncores" && make -j "$ncores" install
 
-echo ""
-echo "#====== If something went wrong when compiling PLIB then make sure"
-echo "#====== you have all dependencies required."
-
+# Compiling SimGear
 echo ""
 echo "#====== Compiling SimGear."
-cd $buildir/SimGear && cmake $download_dir/SimGear -DCMAKE_BUILD_TYPE="$buildtype"  -DBUILD_TESTING=OFF -DENABLE_TESTS=OFF -DENABLE_SIMD_CODE=ON -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
-make -j $ncores && echo "#====== Installing SimGear." && make install&& rm -rf $buildir/SimGear
-echo "#====== If something went wrong when compiling SimGear then make sure"
-echo "#====== you have all dependencies required."
+cd "$compiler_out_directory"/SimGear && cmake "$download_directory"/SimGear -DCMAKE_BUILD_TYPE="$buildtype"  -DBUILD_TESTING=OFF -DENABLE_TESTS=OFF -DENABLE_SIMD_CODE=ON -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX="$install_directory"
+make -j "$ncores" && make -j "$ncores" install
 
+# Compiling FlightGear
 echo ""
 echo "#====== Compiling FlightGear."
-cd $buildir/FlightGear && cmake $download_dir/FlightGear -DCMAKE_BUILD_TYPE="$buildtype" -DSYSTEM_FLITE=OFF -DENABLE_AUTOTESTING=OFF -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX=$installdir
-make -j $ncores && echo "#====== Installing FlightGear." && make install && rm -rf $buildir/FlightGear
+cd "$compiler_out_directory"/FlightGear && cmake "$download_directory"/FlightGear -DCMAKE_BUILD_TYPE="$buildtype" -DSYSTEM_FLITE=OFF -DENABLE_AUTOTESTING=OFF -DENABLE_SIMD=ON -DCMAKE_CXX_FLAGS_RELEASE="$cflags" -DCMAKE_C_FLAGS_RELEASE="$cflags" -DCMAKE_INSTALL_PREFIX="$install_directory"
+make -j "$ncores" && make -j "$ncores" install
 
 echo ""
 echo "#====== If something went wrong when compiling FlightGear then make sure"
@@ -122,24 +124,39 @@ echo "#====== Creating fgfs runner script."
 # Creates $installdir/flightgear
 # To learn more about fg home and root read http://wiki.flightgear.org/$FG_HOME and http://wiki.flightgear.org/$FG_ROOT
 
+FG_HOME="$install_directory"/fghome
+FG_ROOT="$install_directory"/data
+FG_SCENERY="$install_directory"/scenery
+FG_AIRCRAFT="$install_directory"/aircraft
+FG_LOG="$install_directory"/logs
+
+mkdir -p "$FG_HOME"
+mkdir -p "$FG_SCENERY"
+mkdir -p "$FG_AIRCRAFT"
+mkdir -p "$FG_LOG"
+
 # Creates $installdir/flightgear
-cat << EOF > "$installdir"/flightgear
+
+cat << EOF > "$install_directory"/flightgear
 #!/bin/bash
-export FG_PROG="$installdir"
-export LD_LIBRARY_PATH="$installdir/lib"
-export FG_HOME="$installdir/FG_HOME"
-export FG_ROOT="$installdir/data"
-$installdir/bin/fgfs \$*
+export FG_PROG="$install_directory"
+export LD_LIBRARY_PATH="$install_directory"/lib
+export FG_HOME="$FG_HOME"
+export FG_ROOT="$FG_ROOT"
+export FG_SCENERY="$FG_SCENERY"
+"$install_directory"/bin/fgfs --prop:/sim/rendering/multithreading-mode=CullThreadPerCameraDrawThreadPerContext --prop:/sim/gui/current-style=0 --prop:/sim/nasal-gc-threaded=true --fg-aircraft="$FG_AIRCRAFT" --prop:/sim/rendering/cache=true --prop:/sim/rendering/multithreading-mode=CullThreadPerCameraDrawThreadPerContext --prop:/sim/gui/current-style=0 --prop:/sim/nasal-gc-threaded=true --terrasync-dir="$FG_SCENERY" --log-level=info --log-dir=$FG_LOG \$*
 EOF
 
-chmod +x $installdir/flightgear # Sets it as executable
+chmod +x "$install_directory"/flightgear # Sets it as executable
 
 echo ""
-echo "#====== Done. Enter $installdir and run $installdir/flightgear to start the sim."
+echo "#====== Done. Enter $install_directory and run $install_directory/flightgear to start the sim."
 echo "#====== The command flightgear will take the same arguments as fgfs, such as \`flightgear --launcher\`"
 echo ""
 echo "#====== If everything went well then you can run FlightGear"
 echo "#====== by running the command \`./flightgear\` or \`./flightgear --launcher\`."
+echo ""
+echo "#====== Don't forget to run Download_Data.sh if you want to get FGData."
 echo ""
 echo "#====== Feel free to ask for help and contribute to this script at"
 echo "#====== https://github.com/Megaf/FlightGearBuilder "
