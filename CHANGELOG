@@ -1,6 +1,18 @@
 # CHANGELOG
 
-#v1.1.2020.12.23.02.14
+# v2.0-Beta
+# New major release
+# flightgear_downloader renamed to FlightGear_Downloader.sh
+# flightgear_compiler renamed to FlightGear_Compier.sh
+# fgdata_downloader renamed to Download_Data.sh
+# Major changes on the functioning of the script.
+# By default FlightGear is installed to $HOME/FlightGear-Stable,
+# the next version, selected by using --next, installed to $HOME/FlightGear-Next
+# Uninstaller removed, to uninstall simply delete the directory.
+# Due to FlightGear devs mistake, now stable version is built against the 
+# release/2020.3 branch instead of version/2020.3.6 tag.
+
+# v1.1.2020.12.23.02.14
 # Update downloader to download latest stable version of FlightGear, 2020.3.5
 
 # v1.1.2020.12.14.02.42
