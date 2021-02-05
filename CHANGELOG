@@ -3,7 +3,7 @@
 # v2.0-Beta
 # New major release
 # flightgear_downloader renamed to FlightGear_Downloader.sh
-# flightgear_compiler renamed to FlightGear_Compier.sh
+# flightgear_compiler renamed to FlightGear_Compiler.sh
 # fgdata_downloader renamed to Download_Data.sh
 # Major changes on the functioning of the script.
 # By default FlightGear is installed to $HOME/FlightGear-Stable,
