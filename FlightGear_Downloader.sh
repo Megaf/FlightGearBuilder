@@ -147,7 +147,7 @@ fi
 echo ""
 echo "#====== If everything went well then you can compile FlightGear"
 echo "#====== by running the command ./FlightGear_Compiler.sh"
-echo "#====== Remember, tou can run Download_Data.sh at the same time you"
+echo "#====== Remember, you can run Download_Data.sh at the same time you"
 echo "#====== run any of the other scripts."
 echo ""
 echo "#====== Feel free to ask for help and contribute to this script at"
