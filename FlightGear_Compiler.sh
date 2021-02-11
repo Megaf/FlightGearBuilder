@@ -162,6 +162,7 @@ Exec=$install_directory/flightgear --launcher
 Name=FlightGear-$release
 Comment=FlightGear-$release Launcher
 Hidden=false
+Keywords=Flight Simulator;Simulation;Flight;FlightGear;FlightGear Builder;FGB'
 EOF
 chmod +x "$HOME"/Desktop/FlightGear-$release.desktop # Sets it as executable
 mkdir -p $HOME/.local/share/applications
