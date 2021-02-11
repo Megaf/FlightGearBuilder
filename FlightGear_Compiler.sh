@@ -153,18 +153,19 @@ chmod +x "$install_directory"/flightgear # Sets it as executable
 cat << EOF > "$HOME"/Desktop/FlightGear-$release.desktop
 #!/usr/bin/env xdg-open
 [Desktop Entry]
-Version=1.0
+Version=1.4
 Type=Application
-Categories=Games
+Categories=Game;Simulation
 Terminal=false
-Icon="$install_directory"/share/icons/hicolor/scalable/apps/flightgear.svg
-Exec="$install_directory"/flightgear --launcher
+Icon=$install_directory/share/icons/hicolor/scalable/apps/flightgear.svg
+Exec=$install_directory/flightgear --launcher
 Name=FlightGear
 Comment=FlightGear Launcher
 Hidden=false
 EOF
 chmod +x "$HOME"/Desktop/FlightGear-$release.desktop # Sets it as executable
-
+mkdir -p $HOME/.local/share/applications
+cp "$HOME"/Desktop/FlightGear-$release.desktop $HOME/.local/share/applications/
 
 echo ""
 echo "#====== Done. Enter $install_directory and run $install_directory/flightgear to start the sim."
