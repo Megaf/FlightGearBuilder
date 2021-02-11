@@ -149,6 +149,9 @@ export FG_SCENERY="$FG_SCENERY"
 EOF
 chmod +x "$install_directory"/flightgear # Sets it as executable
 
+echo ""
+echo "#====== Creating a Desktop shortcut for FlightGear-$release"
+
 # Creates desktop luncher
 cat << EOF > "$HOME"/Desktop/FlightGear-$release.desktop
 #!/usr/bin/env xdg-open
@@ -165,8 +168,15 @@ Hidden=false
 Keywords=Flight Simulator;Simulation;Flight;FlightGear;FlightGear Builder;FGB;Aviation;Airplanes
 EOF
 chmod +x "$HOME"/Desktop/FlightGear-$release.desktop # Sets it as executable
-mkdir -p $HOME/.local/share/applications
-cp "$HOME"/Desktop/FlightGear-$release.desktop $HOME/.local/share/applications/
+
+echo ""
+echo "#====== Adding FlightGear-$release menu entry."
+
+mkdir -p $HOME/.local/share/applications # Creating this directory if it doesn't exist
+cp "$HOME"/Desktop/FlightGear-$release.desktop $HOME/.local/share/applications/ # Adds FlightGear to the list of software in the users menu.
+
+echo ""
+echo "#====== If you don't want the shortcuts, simply delete them from your $HOME/Desktop and $HOME/.local/share/applications"
 
 echo ""
 echo "#====== Done. Enter $install_directory and run $install_directory/flightgear to start the sim."
