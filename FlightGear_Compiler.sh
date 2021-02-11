@@ -51,6 +51,7 @@ read -r version < VERSION
 download_directory="$HOME"/FlightGear-Stable_Source_Files
 install_directory="$HOME"/FlightGear-Stable
 compiler_out_directory="/dev/shm/FlightGear-Stable"
+release="Stable"
 
 # By default, without command line arguments the script will download the stable
 # version of FlightGear, the following "if" statement downloads the "next"
@@ -62,6 +63,7 @@ if [ "$*" = "--next" ]; then
     download_directory="$HOME"/FlightGear-Next_Source_Files
     install_directory="$HOME"/FlightGear-Next
     compiler_out_directory="/dev/shm/FlightGear-Next"
+    release="Next"
 fi
 
 # Uses ccache (https://ccache.dev/) if it's available, to speed rebuilds
@@ -136,7 +138,6 @@ mkdir -p "$FG_AIRCRAFT"
 mkdir -p "$FG_LOG"
 
 # Creates $installdir/flightgear
-
 cat << EOF > "$install_directory"/flightgear
 #!/bin/bash
 export FG_PROG="$install_directory"
@@ -146,8 +147,24 @@ export FG_ROOT="$FG_ROOT"
 export FG_SCENERY="$FG_SCENERY"
 "$install_directory"/bin/fgfs --prop:/sim/rendering/multithreading-mode=CullThreadPerCameraDrawThreadPerContext --prop:/sim/gui/current-style=0 --prop:/sim/nasal-gc-threaded=true --fg-aircraft="$FG_AIRCRAFT" --prop:/sim/rendering/cache=true --prop:/sim/rendering/multithreading-mode=CullThreadPerCameraDrawThreadPerContext --prop:/sim/gui/current-style=0 --prop:/sim/nasal-gc-threaded=true --terrasync-dir="$FG_SCENERY" --log-level=info --log-dir=$FG_LOG \$*
 EOF
-
 chmod +x "$install_directory"/flightgear # Sets it as executable
+
+# Creates desktop luncher
+cat << EOF > "$HOME"/Desktop/FlightGear-$release.desktop
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Type=Application
+Categories=Games
+Terminal=false
+Icon="$install_directory"/share/icons/hicolor/scalable/apps/flightgear.svg
+Exec="$install_directory"/flightgear --launcher
+Name=FlightGear
+Comment=FlightGear Launcher
+Hidden=false
+EOF
+chmod +x "$HOME"/Desktop/FlightGear-$release.desktop # Sets it as executable
+
 
 echo ""
 echo "#====== Done. Enter $install_directory and run $install_directory/flightgear to start the sim."
