@@ -160,9 +160,9 @@ Terminal=false
 Icon=$install_directory/share/icons/hicolor/scalable/apps/flightgear.svg
 Exec=$install_directory/flightgear --launcher
 Name=FlightGear-$release
-Comment=FlightGear-$release Launcher
+Comment=FlightGear-$release Launcher Compiled with FlightGear Builder
 Hidden=false
-Keywords=Flight Simulator;Simulation;Flight;FlightGear;FlightGear Builder;FGB'
+Keywords=Flight Simulator;Simulation;Flight;FlightGear;FlightGear Builder;FGB;Aviation;Airplanes
 EOF
 chmod +x "$HOME"/Desktop/FlightGear-$release.desktop # Sets it as executable
 mkdir -p $HOME/.local/share/applications
