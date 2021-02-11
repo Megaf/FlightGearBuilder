@@ -159,8 +159,8 @@ Categories=Game;Simulation
 Terminal=false
 Icon=$install_directory/share/icons/hicolor/scalable/apps/flightgear.svg
 Exec=$install_directory/flightgear --launcher
-Name=FlightGear
-Comment=FlightGear Launcher
+Name=FlightGear-$release
+Comment=FlightGear-$release Launcher
 Hidden=false
 EOF
 chmod +x "$HOME"/Desktop/FlightGear-$release.desktop # Sets it as executable
