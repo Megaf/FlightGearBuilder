@@ -140,12 +140,17 @@ mkdir -p "$FG_LOG"
 # Creates $installdir/flightgear
 cat << EOF > "$install_directory"/flightgear
 #!/bin/bash
+export OSG_NUM_DATABASE_THREADS=$(expr $(nproc) '*' 2)
+export OSG_OPTIMIZER=REMOVE_REDUNDANT_NODES
+export OSG_NUM_HTTP_DATABASE_THREADS=$(expr $(nproc) '*' 2)
+export OSG_GL_TEXTURE_STORAGE=on
+export OSG_COMPILE_CONTEXTS=on
 export FG_PROG="$install_directory"
 export LD_LIBRARY_PATH="$install_directory"/lib
 export FG_HOME="$FG_HOME"
 export FG_ROOT="$FG_ROOT"
 export FG_SCENERY="$FG_SCENERY"
-"$install_directory"/bin/fgfs --prop:/sim/rendering/multithreading-mode=CullThreadPerCameraDrawThreadPerContext --prop:/sim/gui/current-style=0 --prop:/sim/nasal-gc-threaded=true --fg-aircraft="$FG_AIRCRAFT" --prop:/sim/rendering/cache=true --prop:/sim/rendering/multithreading-mode=CullThreadPerCameraDrawThreadPerContext --prop:/sim/gui/current-style=0 --prop:/sim/nasal-gc-threaded=true --terrasync-dir="$FG_SCENERY" --log-level=info --log-dir=$FG_LOG \$*
+"$install_directory"/bin/fgfs --disable-hud-3d --prop:/sim/rendering/multithreading-mode=CullThreadPerCameraDrawThreadPerContext --prop:/sim/gui/current-style=0 --prop:/sim/nasal-gc-threaded=true --fg-aircraft="$FG_AIRCRAFT" --prop:/sim/rendering/cache=true --prop:/sim/rendering/multithreading-mode=CullThreadPerCameraDrawThreadPerContext --prop:/sim/gui/current-style=0 --prop:/sim/nasal-gc-threaded=true --terrasync-dir="$FG_SCENERY" --log-level=info --log-dir=$FG_LOG \$*
 EOF
 chmod +x "$install_directory"/flightgear # Sets it as executable
 
