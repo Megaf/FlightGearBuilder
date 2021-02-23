@@ -70,7 +70,9 @@ fi
 export PATH="/usr/lib/ccache:${PATH}"
 
 # Compiler flags
-cflags="-march=x86-64 -mtune=generic -Os -pipe -mfpmath=both"
+cflags="-march=native -mtune=native -O2 -pipe"
+#cflags="-march=x86-64 -mtune=generic -Os -pipe -mfpmath=both"
+
 buildtype="Release" # Build type, Release for better performance. All flags in this script are for Release type.
 
 # Variables defining which branches will be used for each repository.
