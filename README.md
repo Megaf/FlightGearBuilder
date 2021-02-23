@@ -3,9 +3,8 @@ An elegant script to download and build OpenSceneGraph, PLIB, SimgGear and,
 FlightGear.
 
 ## What Does It Do?
-FlightGearBuilder is a shell script that will download the source code for OSG,
-PLIB, SG and FG.
-Then it will compile a nice and stable version of it.
+FlightGearBuilder is a small collection of shell scripts that will download the source code for OSG, PLIB, SimGear and FlightGear.
+Then it will then compile a nice and stable version of them.
 
 ## How do I run it?
 
@@ -25,6 +24,7 @@ to donwload the latest unstable version.
 
 #### Uninstalling FlightGear
 Simply remove the **`FlightGear-*`** directories from your **`$HOME`** folder.
+There will be a launcher at **`$HOME/.local/share/applications/`**, remove it to remove FlightGear from the applications menu.
 
 ## Where is FlightGear Installed to?
 By default the script will install to **`~/FlightGear-Stable/Next`**.
@@ -32,4 +32,5 @@ By default the script will install to **`~/FlightGear-Stable/Next`**.
 ## How to I run FlightGear?
 If everything wel well, you can run **`./flightgear --launcher`** from
 the folder **`~/FlightGear-Stable/Next`**.
+Or, by simply searching for and clicking in **FlightGear** in your DEs applications menu/dashboard.
 
