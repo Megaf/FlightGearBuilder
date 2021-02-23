@@ -70,7 +70,7 @@ fi
 export PATH="/usr/lib/ccache:${PATH}"
 
 # Compiler flags
-cflags="-march=native -mtune=native -O2 -pipe"
+cflags="-Wno-implicit-fallthrough -Wno-deprecated-copy -Wno-dev -march=native -mtune=native -O2 -pipe"
 #cflags="-march=x86-64 -mtune=generic -Os -pipe -mfpmath=both"
 
 buildtype="Release" # Build type, Release for better performance. All flags in this script are for Release type.
