@@ -76,7 +76,7 @@ cflags="-w -march=native -mtune=native -O2 -pipe"
 buildtype="Release" # Build type, Release for better performance. All flags in this script are for Release type.
 
 # Variables defining which branches will be used for each repository.
-ncores="$(nproc)" # Sets the number of compiler tasks according to number of logical cpus in your system
+ncores="$(expr $(nproc) '+' 1)" # Sets the number of compiler tasks according to number of logical cpus in your system
 
 # Creating directories where cmake will run from.
 mkdir -p "$compiler_out_directory"/OSG "$compiler_out_directory"/PLIB "$compiler_out_directory"/SimGear "$compiler_out_directory"/FlightGear
