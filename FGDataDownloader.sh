@@ -48,7 +48,7 @@
 read -r version < VERSION
 
 # Directory where the source files will be downloaded to.
-install_directory="$HOME/FlightGear-Stable"
+install_directory="$HOME/FGB/FGData-Stable"
 
 # Git Repository to download the source files from.
 fgdata_repository="git://git.code.sf.net/p/flightgear/fgdata"
@@ -61,10 +61,10 @@ fgdata_branch="release/2020.3"
 # version of FlightGear, the following "if" statement downloads the "next"
 # development version of FlightGear.
 #
-# It will also install FlightGear to folder name FlightGear-Next instead of 
+# It will also install FlightGear to folder name FlightGear-Next instead of
 # FlightGear-Stable
 if [ "$*" = "--next" ]; then
-    install_directory="$HOME/FlightGear-Next"
+    install_directory="$HOME/FGB/FGData-Next"
     fgdata_branch="next"
 fi
 
