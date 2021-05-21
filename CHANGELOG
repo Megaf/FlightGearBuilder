@@ -1,5 +1,12 @@
 # CHANGELOG
 
+# Nue Generation
+# 2.20210521.Alpha1
+# Totally new release, rewritten from scratch, now using Shell functions.
+# Added ability to download dependencies automatically on Debian based distros.
+# Removed ability to donwload FlightGear data.
+# Changed versioning scheme to MajorVersion.MinorVersion.StabilityState
+
 # v2.0-Beta-1
 # Shortcuts are added to the Desktop and the desktop applications menu.
 
