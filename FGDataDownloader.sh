@@ -52,9 +52,9 @@ install_directory="$HOME/FGB/FGData-Stable"
 
 # Git Repository to download the source files from.
 fgdata_repository="git://git.code.sf.net/p/flightgear/fgdata"
+#fgdata_repository="https://gitlab.com/flightgear/fgdata"
 
 # Branches/Versions of each component.
-#fgdata_branch="version/2020.3.6"
 fgdata_branch="release/2020.3"
 
 # By default, without command line arguments the script will download the stable

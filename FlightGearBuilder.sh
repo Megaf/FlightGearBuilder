@@ -31,7 +31,7 @@ HOME="/home/$USER" # This is mostly redundant, we are making sure that the users
 # In this first batch of variables we are setting for the stable and default version of FlightGear. ie, without using --next
 fg_install="$HOME/FGB/FlightGear-Stable" # Where FlightGear will be installed to.
 fg_branch="release/2020.3" # Defining the branch we want to compile against, at the moment Im writing this the latest stable is 2020.3.
-osg_branch="OpenSceneGraph-3.4" # Defining branch and version for OpenSceneGraph, OSG 3.4 is the latest that works with FG 2020.3 at this time.
+osg_branch="OpenSceneGraph-3.6" # Defining branch and version for OpenSceneGraph.
 dir="$HOME/FGB/FlightGear-Sources-Stable" # Where the source code for OSG, SG and FG will be kept. A full download is done first. Later updated.
 ldlib="export LD_LIBRARY_PATH=$fg_install/lib:$fg_install/lib64" # All our libs are located withing the FG install location.
 release_type="Stable" # Will be used to set the launcher name in the desktop and menus.
