@@ -122,7 +122,7 @@ export FG_HOME="$fg_home"
 export FG_PROG="$fg_install"
 export FG_SCENERY="$fg_scenery"
 $ldlib
-"$fg_install"/bin/fgfs --fg-aircraft="$fg_aircraft" --terrasync-dir="$fg_scenery" --prop:/sim/rendering/bump-mapping=true --prop:/sim/rendering/enhanced-lighting=true --prop:/sim/rendering/lightning-enable=true --disable-hud-3d --prop:/sim/nasal-gc-threaded=true --prop:/sim/rendering/multithreading-mode=CullThreadPerCameraDrawThreadPerContext --prop:/sim/gui/current-style=0 --prop:/sim/rendering/cache=true --prop:/sim/rendering/texture-cache/cache-enabled=true --prop:/sim/nasal-gc-threaded=true --prop:/sim/rendering/use-vbos=true --enable-distance-attenuation --enable-horizon-effect --enable-specular-highlight --shading-smooth --fog-nicest --texture-filtering=16 --prop:/sim/rendering/multi-sample-buffers=true --prop:/sim/rendering/multi-samples=4 \$*
+"$fg_install"/bin/fgfs --fg-aircraft="$fg_aircraft" --terrasync-dir="$fg_scenery" --prop:/sim/rendering/multithreading-mode=CullThreadPerCameraDrawThreadPerContext --prop:/sim/gui/current-style=0 --prop:/sim/rendering/cache=true --prop:/sim/rendering/texture-cache/cache-enabled=true --prop:/sim/nasal-gc-threaded=true --prop:/sim/rendering/use-vbos=true \$*
 EOF
 
 chmod +x "$fg_install"/flightgear
