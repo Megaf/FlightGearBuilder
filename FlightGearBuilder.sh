@@ -40,7 +40,7 @@ release_type="Stable" # Will be used to set the launcher name in the desktop and
 if [ "$*" = "--next" ]; then
     fg_install="$HOME/FGB/FlightGear-Next"
     fg_branch="next"
-    osg_branch="master"
+#    osg_branch="master" # Uncomment this line to use the latest development version of OSG for FlightGear Next.
     dir="$HOME/FGB/FlightGear-Sources-Next"
     ldlib="export LD_LIBRARY_PATH=$fg_install/lib"
     release_type="Next"
