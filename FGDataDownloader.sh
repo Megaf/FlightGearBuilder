@@ -79,7 +79,7 @@ echo ""
 # Waits for the user to press a key to continue.
 echo ""
 echo "#====== Will get data $fgdata_branch - Press any key to continue or Ctrl + C to cancel."
-read -rsn1
+#read -rsn1
 clear
 
 # Checking FlightGear Data.

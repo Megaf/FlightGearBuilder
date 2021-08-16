@@ -26,22 +26,23 @@ deb_install_deps() {
 }
 
 # Here we are setting some variables that will be used for the whole script.
-HOME="/home/$USER" # This is mostly redundant, we are making sure that the users home is the users home.
+instroot="$HOME" # As set, we are installing everything to the users home.
+# If you want to install to a USB flash drive, replace "$HOME" with the full path to your mounted USB drive, for example: "/media/george/GeorgesUSB".
 
 # In this first batch of variables we are setting for the stable and default version of FlightGear. ie, without using --next
-fg_install="$HOME/FGB/FlightGear-Stable" # Where FlightGear will be installed to.
+fg_install="$instroot""/FGB/FlightGear-Stable" # Where FlightGear will be installed to.
 fg_branch="release/2020.3" # Defining the branch we want to compile against, at the moment Im writing this the latest stable is 2020.3.
 osg_branch="OpenSceneGraph-3.6" # Defining branch and version for OpenSceneGraph.
-dir="$HOME/FGB/FlightGear-Sources-Stable" # Where the source code for OSG, SG and FG will be kept. A full download is done first. Later updated.
+dir="$instroot""/FGB/FlightGear-Sources-Stable" # Where the source code for OSG, SG and FG will be kept. A full download is done first. Later updated.
 ldlib="export LD_LIBRARY_PATH=$fg_install/lib:$fg_install/lib64" # All our libs are located withing the FG install location.
 release_type="Stable" # Will be used to set the launcher name in the desktop and menus.
 
 # This batch of variables are similar to the above, here we simply check if the user wants to build FG Next and adjust variables accordinly.
 if [ "$*" = "--next" ]; then
-    fg_install="$HOME/FGB/FlightGear-Next"
+    fg_install="$instroot""/FGB/FlightGear-Next"
     fg_branch="next"
 #    osg_branch="master" # Uncomment this line to use the latest development version of OSG for FlightGear Next.
-    dir="$HOME/FGB/FlightGear-Sources-Next"
+    dir="$instroot""/FGB/FlightGear-Sources-Next"
     ldlib="export LD_LIBRARY_PATH=$fg_install/lib"
     release_type="Next"
 fi
@@ -49,7 +50,7 @@ fi
 # Our second function
 # Some general variables, defining locations of files and directories for FlightGear.
 set_globals() {
-    fg_common="$HOME/FGB/FlightGear-Common" # FlightGear-Common is where we put FG_HOME and downloaded content.
+    fg_common="instroot""/FGB/FlightGear-Common" # FlightGear-Common is where we put FG_HOME and downloaded content.
     fg_home="$fg_common/FG_HOME" # FG_HOME is where logs and settings live.
     fg_scenery="$fg_common/Scenery" # Scenery will be downloaded by terrasync to Scenery, inside FlightGear-Common. Add custom scenery here.
     fg_aircraft="$fg_common/Aircraft" # Add your downloaded aircraft here, to Aircraft in FlightGear-Common
@@ -198,7 +199,7 @@ release="$fg_branch"
 install_directory="$fg_install"
 
 # Creates desktop luncher
-cat << EOF > "$HOME/Desktop/FlightGear-$release_type.desktop"
+cat << EOF > "$HOME""/Desktop/FlightGear-$release_type.desktop"
 #!/usr/bin/env xdg-open
 [Desktop Entry]
 Version=1.4
@@ -213,10 +214,10 @@ Comment=FlightGear-$release_type Launcher Compiled with FlightGear Builder
 Hidden=false
 Keywords=Flight Simulator;Simulation;Flight;FlightGear;FlightGear Builder;FGB;Aviation;Airplanes
 EOF
-chmod +x "$HOME"/Desktop/FlightGear-$release_type.desktop # Sets it as executable
+chmod +x "$HOME""/Desktop/FlightGear-""$release_type"".desktop" # Sets it as executable
 
 echo ""
 echo "#====== Adding FlightGear-$release_type menu entry."
 
-mkdir -p $HOME/.local/share/applications # Creating this directory if it doesn't exist
-cp "$HOME"/Desktop/FlightGear-$release_type.desktop $HOME/.local/share/applications/ # Adds FlightGear to the list of software in the users menu.
+mkdir -p "$HOME"/.local/share/applications # Creating this directory if it doesn't exist
+cp "$HOME"/Desktop/FlightGear-"$release_type".desktop "$HOME"/.local/share/applications/ # Adds FlightGear to the list of software in the users menu.
