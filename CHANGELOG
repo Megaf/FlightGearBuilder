@@ -1,6 +1,14 @@
 # CHANGELOG
 
 # Nue Generation
+# 2.20210816.Beta1
+# Work done on puting variable names in quotes.
+# Minor text changes throughout.
+# Compiler flags defined on the top of the code in a single place now.
+# Install "root" now defined by a properly named variable. Making easier to
+# move FG to another location.
+# Naming convention will be as the following: MajorRelease.MinorRelease.StabilityState
+
 # 2.20210521.Alpha1
 # Totally new release, rewritten from scratch, now using Shell functions.
 # Added ability to download dependencies automatically on Debian based distros.
