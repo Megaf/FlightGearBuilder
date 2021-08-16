@@ -1,3 +1,10 @@
+# !! ATTENTION !!!
+A new version of the script will soon be released.
+## Changes from Version 2 onwards.
+Downloader and Compiler are not merged into FlightGearBuilder.sh script.
+Download_Data is now called FGDataDownloader
+The scripts are now based on Shell Script functions, it is even more open and flexible now.
+
 # FlightGearBuilder
 An elegant script to download and build OpenSceneGraph, PLIB, SimgGear and,
 FlightGear.
