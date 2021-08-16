@@ -36,6 +36,9 @@ osg_branch="OpenSceneGraph-3.6" # Defining branch and version for OpenSceneGraph
 dir="$instroot""/FGB/FlightGear-Sources-Stable" # Where the source code for OSG, SG and FG will be kept. A full download is done first. Later updated.
 ldlib="export LD_LIBRARY_PATH=$fg_install/lib:$fg_install/lib64" # All our libs are located withing the FG install location.
 release_type="Stable" # Will be used to set the launcher name in the desktop and menus.
+CFLAGS="-w -march=native -mtune=native -Ofast"
+CXXFLAGS="$CFLAGS"
+cc_flags="$CFLAGS"
 
 # This batch of variables are similar to the above, here we simply check if the user wants to build FG Next and adjust variables accordinly.
 if [ "$*" = "--next" ]; then
@@ -89,9 +92,6 @@ git_clone() {
 
 compile() {
     echo "oo Compiling $target oo"
-    local cc_flags="-w -march=native -mtune=native -Ofast"
-    local CXXFLAGS=$cc_flags
-    local CFLAGS=$cc_flags
     echo "dir = $dir"
     echo "target = $target"
     cd "$dir/$target"
@@ -102,7 +102,6 @@ compile() {
 
 build() {
     echo "oo Compiling $target oo"
-    local cc_flags="-w -march=native -mtune=native -Ofast"
     local cmake_flags="-DCMAKE_C_FLAGS=$cc_flags -DCMAKE_CXX_FLAGS=$cc_flags -DCMAKE_INSTALL_PREFIX=$fg_install -DCMAKE_BUILD_TYPE=Release $cmflags"
     local bld_dir="$dir"/building/"$target"
     rm -rf "bld_dir" && mkdir -p "$bld_dir" && cd "$bld_dir"
@@ -117,8 +116,8 @@ cat << EOF > "$fg_install"/flightgear
 export OSG_NUM_DATABASE_THREADS="$(expr $(nproc) '+' 1)"
 export OSG_OPTIMIZER=REMOVE_REDUNDANT_NODES
 export OSG_NUM_HTTP_DATABASE_THREADS="$(expr $(nproc) '+' 1)"
-export OSG_GL_TEXTURE_STORAGE=on
-export OSG_COMPILE_CONTEXTS=on
+export OSG_GL_TEXTURE_STORAGE="on"
+export OSG_COMPILE_CONTEXTS="on"
 export FG_HOME="$fg_home"
 export FG_PROG="$fg_install"
 export FG_SCENERY="$fg_scenery"
