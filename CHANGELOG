@@ -8,6 +8,7 @@
 # Install "root" now defined by a properly named variable. Making easier to
 # move FG to another location.
 # Naming convention will be as the following: MajorRelease.MinorRelease.StabilityState
+# Updated readme.
 
 # 2.20210521.Alpha1
 # Totally new release, rewritten from scratch, now using Shell functions.
