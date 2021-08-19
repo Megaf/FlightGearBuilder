@@ -26,15 +26,17 @@ deb_install_deps() {
 }
 
 # Here we are setting some variables that will be used for the whole script.
-instroot="$HOME" # As set, we are installing everything to the users home.
-# If you want to install to a USB flash drive, replace "$HOME" with the full path to your mounted USB drive, for example: "/media/george/GeorgesUSB".
+
+# Reading install destination for the file DESTINATION. Edit that file with the full path of where you want FlightGear to be installed to.
+# If you want to install to a USB drive called USDdrive, add "/media/$USER/USDdrive" to DESTINATION.
+instroot="$(envsubst < DESTINATION)"
 
 # In this first batch of variables we are setting for the stable and default version of FlightGear. ie, without using --next
 fg_install="$instroot""/FGB/FlightGear-Stable" # Where FlightGear will be installed to.
 fg_branch="release/2020.3" # Defining the branch we want to compile against, at the moment Im writing this the latest stable is 2020.3.
 osg_branch="OpenSceneGraph-3.6" # Defining branch and version for OpenSceneGraph.
 dir="$instroot""/FGB/FlightGear-Sources-Stable" # Where the source code for OSG, SG and FG will be kept. A full download is done first. Later updated.
-ldlib="export LD_LIBRARY_PATH=$fg_install/lib:$fg_install/lib64" # All our libs are located withing the FG install location.
+ldlib="export LD_LIBRARY_PATH=""$fg_install""/lib:""$fg_install""/lib64" # All our libs are located withing the FG install location.
 release_type="Stable" # Will be used to set the launcher name in the desktop and menus.
 CFLAGS="-w -march=native -mtune=native -Ofast"
 CXXFLAGS="$CFLAGS"
@@ -46,14 +48,14 @@ if [ "$*" = "--next" ]; then
     fg_branch="next"
 #    osg_branch="master" # Uncomment this line to use the latest development version of OSG for FlightGear Next.
     dir="$instroot""/FGB/FlightGear-Sources-Next"
-    ldlib="export LD_LIBRARY_PATH=$fg_install/lib"
+    ldlib="export LD_LIBRARY_PATH=""$fg_install""/lib"
     release_type="Next"
 fi
 
 # Our second function
 # Some general variables, defining locations of files and directories for FlightGear.
 set_globals() {
-    fg_common="instroot""/FGB/FlightGear-Common" # FlightGear-Common is where we put FG_HOME and downloaded content.
+    fg_common="$instroot""/FGB/FlightGear-Common" # FlightGear-Common is where we put FG_HOME and downloaded content.
     fg_home="$fg_common/FG_HOME" # FG_HOME is where logs and settings live.
     fg_scenery="$fg_common/Scenery" # Scenery will be downloaded by terrasync to Scenery, inside FlightGear-Common. Add custom scenery here.
     fg_aircraft="$fg_common/Aircraft" # Add your downloaded aircraft here, to Aircraft in FlightGear-Common
@@ -71,7 +73,7 @@ set_globals() {
 svn_checkout() {
     echo ""
     echo "=> Now downloading $target from $url"
-    local to_check="$dir/$target"
+    local to_check="$dir""/$target"
     if [ -d "$to_check" ]; then
         cd $to_check && svn update
     else
@@ -82,7 +84,7 @@ svn_checkout() {
 git_clone() {
     echo ""
     echo "=> Now downloading $target from $url"
-    local to_check="$dir/$target"
+    local to_check="$dir""/$target"
     if [ -d "$to_check" ]; then
         cd $to_check && git checkout "$branch" && git pull
     else
@@ -92,9 +94,9 @@ git_clone() {
 
 compile() {
     echo "oo Compiling $target oo"
-    echo "dir = $dir"
-    echo "target = $target"
-    cd "$dir/$target"
+    echo "dir = ""$dir"
+    echo "target = ""$target"
+    cd "$dir""/""$target"
     ./autogen.sh
     ./configure --prefix="$fg_install"
     make clean && make -j "$(expr $(nproc) '+' 2)"
@@ -207,7 +209,8 @@ Categories=Game;Simulation
 Terminal=false
 Icon=$install_directory/share/icons/hicolor/scalable/apps/flightgear.svg
 Path=$install_directory
-Exec=sh -c "cd $install_directory && ./flightgear --launcher"
+#Exec=sh -c "cd $install_directory && ./flightgear --launcher"
+Exec=./$install_directory/flightgear --launcher
 Name=FlightGear-$release_type
 Comment=FlightGear-$release_type Launcher Compiled with FlightGear Builder
 Hidden=false

@@ -46,9 +46,10 @@
 
 # Using read command to get version information from the file VERSION
 read -r version < VERSION
+instroot="$(envsubst < DESTINATION)"
 
 # Directory where the source files will be downloaded to.
-install_directory="$HOME/FGB/FGData-Stable"
+install_directory="$instroot""/FGB/FGData-Stable"
 
 # Git Repository to download the source files from.
 fgdata_repository="git://git.code.sf.net/p/flightgear/fgdata"
@@ -64,7 +65,7 @@ fgdata_branch="release/2020.3"
 # It will also install FlightGear to folder name FlightGear-Next instead of
 # FlightGear-Stable
 if [ "$*" = "--next" ]; then
-    install_directory="$HOME/FGB/FGData-Next"
+    install_directory="$instroot""/FGB/FGData-Next"
     fgdata_branch="next"
 fi
 
@@ -90,5 +91,6 @@ if [ -d "$install_directory"/data ]; then
     cd "$install_directory"/data && git pull # Try to update existing previously cloned repo.
         else
             echo "#====== FlightGear Data not found, downloading now."
+            mkdir -p "$install_directory"
             git clone -b "$fgdata_branch" "$fgdata_repository" "$install_directory"/data # Clone repo from Git
 fi
