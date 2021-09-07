@@ -41,6 +41,7 @@ release_type="Stable" # Will be used to set the launcher name in the desktop and
 export CFLAGS="-w -march=native -mtune=native -Ofast"
 export CXXFLAGS="$CFLAGS"
 export cc_flags="$CFLAGS"
+nproc="$(nproc)"
 
 # This batch of variables are similar to the above, here we simply check if the user wants to build FG Next and adjust variables accordinly.
 if [ "$*" = "--next" ]; then
@@ -99,7 +100,7 @@ compile() {
     cd "$dir""/""$target"
     ./autogen.sh
     ./configure --prefix="$fg_install"
-    make clean && make -j "$(expr $(nproc) '+' 2)"
+    make clean && make -j "$nproc"
 }
 
 build() {
@@ -108,7 +109,7 @@ build() {
     local bld_dir="$dir"/building/"$target"
     rm -rf "bld_dir" && mkdir -p "$bld_dir" && cd "$bld_dir"
     cmake $cmake_flags "$dir"/"$target"
-    make clean && make -j "$(expr $(nproc) '+' 2)"
+    make clean && make -j "$nproc"
 }
 
 make_runner() {
