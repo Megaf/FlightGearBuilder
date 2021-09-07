@@ -38,9 +38,9 @@ osg_branch="OpenSceneGraph-3.6" # Defining branch and version for OpenSceneGraph
 dir="$instroot""/FGB/FlightGear-Sources-Stable" # Where the source code for OSG, SG and FG will be kept. A full download is done first. Later updated.
 ldlib="export LD_LIBRARY_PATH=""$fg_install""/lib:""$fg_install""/lib64" # All our libs are located withing the FG install location.
 release_type="Stable" # Will be used to set the launcher name in the desktop and menus.
-CFLAGS="-w -march=native -mtune=native -Ofast"
-CXXFLAGS="$CFLAGS"
-cc_flags="$CFLAGS"
+export CFLAGS="-w -march=native -mtune=native -Ofast"
+export CXXFLAGS="$CFLAGS"
+export cc_flags="$CFLAGS"
 
 # This batch of variables are similar to the above, here we simply check if the user wants to build FG Next and adjust variables accordinly.
 if [ "$*" = "--next" ]; then
