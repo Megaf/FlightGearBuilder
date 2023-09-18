@@ -1,3 +1,5 @@
+# [REPLACED BY https://github.com/Megaf/FlightGearBuilder-NG ]
+
 # FlightGearBuilder
 ## About
 #### FlightGearBuilder is an elegant and simple script that will:
